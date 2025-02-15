@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Details Form</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            height: 130vh;
+        }
+        .content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 150px auto 0;
+        }
+        .btn-submit {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-submit:hover {
+            background-color: #ff9800;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h3>Faculty Details Form</h3>
+        <form id="facultyDetailsForm" method="POST" action="/details"> <!-- Corrected action -->
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+
+            <div class="form-group">
+                <label for="facultyName">Name of Faculty:</label>
+                <input type="text" class="form-control" id="facultyName" name="facultyName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="designation">Designation:</label>
+                <select class="form-control" id="designation" name="designation" required>
+                    <option value="" disabled selected>Select Designation</option>
+                    <option value="Professor">Professor</option>
+                    <option value="Assistant Professor">Assistant Professor</option>
+                    <option value="Associate Professor">Associate Professor</option>
+                    <option value="Head of Department">Head of Department</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="doj">Date of Joining:</label>
+                <input type="date" class="form-control" id="doj" name="doj" required>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob" name="dob" required>
+            </div>
+
+            <div class="form-group">
+                <label for="qualifications">Educational Qualifications:</label>
+                <input type="text" class="form-control" id="qualifications" name="qualifications" required>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Experience:</label>
+                <textarea class="form-control" id="experience" name="experience" rows="3" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

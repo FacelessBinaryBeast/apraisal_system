@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Our Team</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            color: white;
+        }
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .top-bar a:hover {
+            text-decoration: underline;
+            color: #ff9800;
+        }
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+        .team-container {
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .team-member {
+            margin: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        .go-back {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+        
+    </div>
+
+    <!-- Logo -->
+    <a href="/landing" class="logo-link">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+
+    <!-- Team Section -->
+    <div class="container team-container">
+        <h1>Meet Our Team</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-3 team-member">
+               <!-- <img src="person1.jpg" alt="Team Member 1"> -->
+                <h3>Prof. Vishal Badgujar</h3>
+                <p>Guide</p>
+            </div>
+            <div class="col-md-3 team-member">
+               <!-- <img src="person2.jpg" alt="Team Member 2"> -->
+                <h3>Mayank Salvi</h3>
+                <p>TE IT C 22104201</p>
+            </div>
+            <div class="col-md-3 team-member">
+              <!--  <img src="person3.jpg" alt="Team Member 3"> -->
+                <h3>Aniruddha Sangle</h3>
+                <p>TE IT C 22104145</p>
+            </div>
+            <div class="col-md-3 team-member">
+               <!-- <img src="person4.jpg" alt="Team Member 4"> -->
+                <h3>Gandhar Rane</h3>
+                <p>TE IT C 22104005</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Go Back Button -->
+    <div class="go-back">
+        <a href="javascript:history.back()" class="btn btn-warning">Go Back</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

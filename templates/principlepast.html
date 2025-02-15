@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appraisal forms</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .top-bar a:hover {
+            text-decoration: underline;
+            color: #ff9800;
+        }
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+        .container {
+            margin-top: 150px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            text-align: center;
+        }
+        .table-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            margin: 0 auto;
+        }
+        .assessment-box {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+        <a href="/principledash">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <a href="/principlestaff" class="logo-link">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <h2>Select Academic Year</h2>
+        <h2>Viewing past forms for Faculty name: {{ user_name }} (User ID: {{ user_id }})</h2> <!-- Display name and user ID together -->
+
+        <form id="principle" method="POST" action="/principle_pastforms" onsubmit="return validateForm()">
+
+            <div class="form-group">
+                <label for="academicYear">Academic Year:</label>
+                <select class="form-control" id="academicYear" name="academicYear"></select>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+<pre></pre>
+    <!-- Display Teaching Data with Assessment -->
+    <!-- Display Teaching Data with Assessment -->
+    {% if teaching_data %}
+    <div class="table-container">
+       <!-- <h3 style="color: red; font-weight: bold; text-align: center;">Give assessment according to the marking scheme</h3>-->
+
+
+        <h3>Teaching Process for Academic Year: {{ selected_year }}</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Semester</th>
+                    <th>Course Code/Name</th>
+                    <th>Classes Scheduled (S)</th>
+                    <th>Classes Held (H)</th>
+                    <th>Points (H/S) * 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in teaching_data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No data available for the selected academic year.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <tr style="background-color: #f5c6d1; font-weight: bold;">
+            <td colspan="5" style="text-align: center; width: 100%; align-content: center; align-items: center;">
+                ACR Total = <span style="font-size: 1.2rem; color: #ed0000;">{{ points_data.teaching }}</span>
+            </td>
+        </tr>
+<pre></pre>
+        <!-- Assessment Input Box -->
+        <div class="assessment-box">
+            <label>Assessment by HOD :</label>
+            <p class="form-control">{{ assessments.hodas1 }}</p>
+        </div>
+    </div>
+    {% endif %}
+<pre></pre>
+{% if feedback_data %}
+<div class="table-container">
+    <h3>Student Feedback for Academic Year: {{ selected_year }}</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Course Code/Name</th>
+                <th>Total Points</th>
+                <th>Points Obtained</th>
+                <th>Uploaded Document</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in feedback_data %}
+            <tr>
+                <td>{{ row[0] }}</td> <!-- Semester -->
+                <td>{{ row[1] }}</td> <!-- Course Code/Name -->
+                <td>{{ row[2] }}</td> <!-- Total Points -->
+                <td>{{ row[3] }}</td> <!-- Points Obtained -->
+                <td>
+                    {% if row[4] %}
+                        <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" 
+                           target="_blank" class="btn btn-primary">
+                           View Document
+                        </a>
+                    {% else %}
+                        No Document
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <tr style="background-color: #f5c6d1; font-weight: bold;">
+        <td colspan="5" style="text-align: center; width: 100%; align-content: center; align-items: center;">
+            ACR Total = <span style="font-size: 1.2rem; color: #ed0000;">{{ points_data.feedback }}</span>
+        </td>
+    </tr>
+    <pre></pre>
+        <!-- Assessment Input Box -->
+        <div class="assessment-box">
+            <label>Assessment by HOD :</label>
+            <p class="form-control">{{ assessments.hodas2 }}</p>
+        </div>
+</div>
+{% endif %}
+
+<pre></pre>
+
+{% if dept_act_data %}
+<div class="table-container">
+    <h3>Department Activities for Academic Year: {{ selected_year }}</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Activity</th>
+                <th>Points</th>
+                <th>Order Copy</th>
+                <th>Uploaded Document</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in dept_act_data %}
+            <tr>
+                <td>{{ row[0] }}</td> <!-- Semester -->
+                <td>{{ row[1] }}</td> <!-- Activity -->
+                <td>{{ row[2] }}</td> <!-- Points -->
+                <td>{{ row[3] }}</td> <!-- Order Copy -->
+                
+                <td>
+                    {% if row[4] %}
+                        <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" 
+                           target="_blank" class="btn btn-primary">
+                           View Document
+                        </a>
+                    {% else %}
+                        No Document
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No department activities available for the selected academic year.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <tr style="background-color: #f5c6d1; font-weight: bold;">
+        <td colspan="5" style="text-align: center; width: 100%; align-content: center; align-items: center;">
+            ACR Total = <span style="font-size: 1.2rem; color: #ed0000;">{{ points_data.dept }}</span>
+        </td>
+    </tr>
+    <pre></pre>
+        <!-- Assessment Input Box -->
+        <div class="assessment-box">
+            <label>Assessment by HOD :</label>
+            <p class="form-control">{{ assessments.hodas3 }}</p>
+        </div>
+</div>
+{% endif %}
+<pre></pre>
+{% if inst_act_data %}
+<div class="table-container">
+    <h3>Institute Activities for Academic Year: {{ selected_year }}</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Activity</th>
+                <th>Points</th>
+                <th>Order Copy</th>
+                <th>Uploaded Document</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in inst_act_data %}
+            <tr>
+                <td>{{ row[0] }}</td> <!-- Semester -->
+                <td>{{ row[1] }}</td> <!-- Activity -->
+                <td>{{ row[2] }}</td> <!-- Points -->
+                <td>{{ row[3] }}</td> <!-- Order Copy -->
+                <td>
+                    {% if row[4] %}
+                        <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" 
+                           target="_blank" class="btn btn-primary">
+                           View Document
+                        </a>
+                    {% else %}
+                        No Document
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No institute activities available for the selected academic year.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <tr style="background-color: #f5c6d1; font-weight: bold;">
+        <td colspan="5" style="text-align: center; width: 100%; align-content: center; align-items: center;">
+            ACR Total = <span style="font-size: 1.2rem; color: #ed0000;">{{ points_data.institute }}</span>
+        </td>
+    </tr>
+    <pre></pre>
+    <div class="assessment-box">
+        <label>Assessment by HOD :</label>
+        <p class="form-control">{{ assessments.hodas4 }}</p>
+    </div>
+
+</div>
+{% endif %}
+ <pre></pre>
+
+ {% if self_improvement_data %}
+            <div class="table-container">
+                <h3>ACR : {{ selected_year }}</h3>
+            <div class="table-container">
+                <h3>Self-Improvement Initiatives for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Month</th>
+                            <th>Name of Conference</th>
+                            <th>ISSN</th>
+                            <th>Co-authors</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in self_improvement_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Title -->
+                            <td>{{ row[1] }}</td>  <!-- Month -->
+                            <td>{{ row[2] }}</td>  <!-- Name of Conference -->
+                            <td>{{ row[3] }}</td>  <!-- ISSN -->
+                            <td>{{ row[4] }}</td>  <!-- Co-authors -->
+                            <td>
+                                <a href="{{ row[5] }}" target="_blank" class="btn btn-primary">View Link</a> <!-- Link -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+            
+            {% if certification_data %}
+            <div class="table-container">
+                <h3>Certifications for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Uploaded Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in certification_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>
+                                {% if row[1] %}
+                                    <a href="{{ url_for('uploaded_file', filename=row[1].split('/')[-1]) }}" target="_blank" class="btn btn-primary">
+                                       View Document
+                                    </a>
+                                {% else %}
+                                    No Document
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if title_data %}
+            <div class="table-container">
+                <h3>Copyright Titles for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Month</th>
+                            <th>Registration Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in title_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>{{ row[1] }}</td>  <!-- Month -->
+                            <td>{{ row[2] }}</td>  <!-- Registration Number -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if resource_data %}
+            <div class="table-container">
+                <h3>Resource Persons for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Name of Institute</th>
+                            <th>Number of Participants</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in resource_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>{{ row[1] }}</td>  <!-- Department -->
+                            <td>{{ row[2] }}</td>  <!-- Name of Institute -->
+                            <td>{{ row[3] }}</td>  <!-- Number of Participants -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if committee_data %}
+            <div class="table-container">
+                <h3>University Committee Members for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Roles</th>
+                            <th>Designation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in committee_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>{{ row[1] }}</td>  <!-- Roles -->
+                            <td>{{ row[2] }}</td>  <!-- Designation -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if project_data %}
+            <div class="table-container">
+                <h3>External Projects for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Description</th>
+                            <th>Contribution</th>
+                            <th>University</th>
+                            <th>Duration</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in project_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Role -->
+                            <td>{{ row[1] }}</td>  <!-- Description -->
+                            <td>{{ row[2] }}</td>  <!-- Contribution -->
+                            <td>{{ row[3] }}</td>  <!-- University -->
+                            <td>{{ row[4] }}</td>  <!-- Duration -->
+                            <td>{{ row[5] }}</td>  <!-- Comments -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+            
+
+            </div>
+            {% endif %}
+            <tr style="background-color: #f5c6d1; font-weight: bold;">
+                <td colspan="5" style="padding: 0; width: 100%;">
+                    <div style="
+                        display: flex;
+                        justify-content: center; /* Align horizontally */
+                        align-items: center; /* Align vertically if needed */
+                        min-height: 50px; /* Optional: Add height */
+                    ">
+                        <div style="
+                            background-color: white;
+                            padding: 10px;
+                            border-radius: 5px;
+                            font-size: 1.2rem;
+                            color: #ed0000;
+                            text-align: center;
+                        ">
+                            ACR Total = <span>{{ points_data.acr }}</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            
+            <div class="assessment-box d-flex flex-column align-items-center mt-3" 
+     style="
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 400px; /* Fixed width */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetics */
+        margin: 0 auto; /* Center horizontally */
+     ">
+     <div class="assessment-box">
+        <label>Assessment by HOD :</label>
+        <p class="form-control">{{ assessments.hodas5 }}</p>
+    </div>
+</div>
+
+            
+            
+            <pre></pre>
+            <pre></pre>
+
+            {% if contribution_data %}
+            <div class="table-container">
+                <h3>Contributions to Society for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Semester</th>
+                            <th>Activity</th>
+                            <th>Points</th>
+                            <th>Order Copy</th>
+                            <th>Uploaded Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in contribution_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Semester -->
+                            <td>{{ row[1] }}</td>  <!-- Activity -->
+                            <td>{{ row[2] }}</td>  <!-- Points -->
+                            <td>{{ row[3] }}</td>  <!-- Order Copy -->
+                            <td>
+                                {% if row[4] %}
+                                    <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" target="_blank" class="btn btn-primary">
+                                       View Document
+                                    </a>
+                                {% else %}
+                                    No Document
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <tr style="background-color: #f5c6d1; font-weight: bold;">
+                    <td colspan="5" style="text-align: center; width: 100%; align-content: center; align-items: center;">
+                        ACR Total = <span style="font-size: 1.2rem; color: #ed0000;">{{ points_data.society }}</span>
+                    </td>
+                </tr>
+                <pre></pre>
+                <div class="assessment-box">
+                    <label>Assessment by HOD :</label>
+                    <p class="form-control">{{ assessments.hodas6 }}</p>
+                </div>
+                
+            </div>
+            {% endif %}
+            
+ <pre></pre>    
+ 
+ {% if points_data %}
+<div class="table-container">
+    <h3>Final Score:</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Criteria</th>
+                <th>Maximum Points</th>
+                <th>Points Earned</th>
+                <th>Points Given by Head of the Department</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Teaching Process</td>
+                <td>25</td>
+                <td>{{ points_data['teaching'] }}</td>
+                <td>{{ assessments['hodas1'] }}</td>
+            </tr>
+            <tr>
+                <td>Students' Feedback</td>
+                <td>25</td>
+                <td>{{ points_data['feedback'] }}</td>
+                <td>{{ assessments['hodas2'] }}</td>
+            </tr>
+            <tr>
+                <td>Departmental Activities</td>
+                <td>20</td>
+                <td>{{ points_data['dept'] }}</td>
+                <td>{{ assessments['hodas3'] }}</td>
+            </tr>
+            <tr>
+                <td>Institute Activity</td>
+                <td>10</td>
+                <td>{{ points_data['institute'] }}</td>
+                <td>{{ assessments['hodas4'] }}</td>
+            </tr>
+            <tr>
+                <td>ACR</td>
+                <td>10</td>
+                <td>{{ points_data['acr'] }}</td>
+                <td>{{ assessments['hodas5'] }}</td>
+            </tr>
+            <tr>
+                <td>Contribution to Society</td>
+                <td>10</td>
+                <td>{{ points_data['society'] }}</td>
+                <td>{{ assessments['hodas6'] }}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th>100</th>
+                <th>{{ points_data['teaching']|int + points_data['feedback']|int + points_data['dept']|int 
+                    + points_data['institute']|int + points_data['acr']|int + points_data['society']|int }}</th>
+                <th>{{ assessments['hodas1']|int + assessments['hodas2']|int + assessments['hodas3']|int 
+                    + assessments['hodas4']|int + assessments['hodas5']|int + assessments['hodas6']|int }}</th>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<pre></pre>
+    <!-- HOD Feedback Section -->
+     <!-- HOD Feedback Section -->
+<div class="container mt-5">
+    <div class="assessment-box">
+        <label>Feedback by Head of the Department:</label>
+        <p>
+            {{ extra_feedback }}
+        </p>
+    </div>
+</div>
+
+
+    <div class="text-center mt-4">
+       
+       <a href="/giveappraisal?userid={{ user_id }}" class="btn btn-primary">Approve</a>
+        <a href="/principlestaff" class="btn btn-primary">Home</a>
+    </div>
+<pre></pre>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function generateAcademicYears() {
+    const currentYear = new Date().getFullYear();
+    const month = new Date().getMonth(); // Get the current month (0 = January, 11 = December)
+    const dropdown = document.getElementById('academicYear');
+
+    // Determine the start year of the current academic year
+    const academicStartYear = month >= 8 ? currentYear : currentYear - 1; // Academic year starts in September
+
+    // Generate options for the current and last 4 academic years
+    for (let i = 0; i <= 4; i++) {
+        const startYear = academicStartYear - i;
+        const endYear = startYear + 1;
+        const option = document.createElement('option');
+        option.value = `${startYear}/${endYear.toString().slice(-2)}`;
+        option.text = `${startYear}/${endYear.toString().slice(-2)}`;
+        dropdown.appendChild(option);
+    }
+}
+
+// Call the function to populate the dropdown when the page loads
+window.onload = generateAcademicYears;
+
+
+function validateForm() {
+    const year = document.getElementById('academicYear').value;
+    if (!year) {
+        alert("Please select an academic year.");
+        return false;
+    }
+    return true;  // Ensure this returns true to allow form submission
+}
+
+
+
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.11/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </script>
+</body>
+</html>

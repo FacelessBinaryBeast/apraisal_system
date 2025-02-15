@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bgs.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure the body takes the full viewport height */
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo img {
+            width: 100px; /* Adjust logo size as needed */
+        }
+        .signup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure the container takes full viewport height */
+            width: 100%;
+            padding: 20px; /* Add padding for better spacing */
+            box-sizing: border-box;
+        }
+        .signup-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        .signup-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .signup-links a {
+            display: block;
+            margin: 5px 0;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .signup-links a:hover {
+            text-decoration: underline;
+        }
+        .warning {
+            color: red;
+            font-size: 12px;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo">
+        <button class="btn btn-link">
+            <img src="/static/logo.png" alt="Logo">
+        </button>
+    </div>
+    
+    <!-- Sign Up Container -->
+    <div class="signup-container">
+        <div class="signup-box">
+            <h3 class="text-center">Sign Up</h3>
+            
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-info">
+                        <ul>
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form action="/register" method="post" onsubmit="return validateForm()"> <!-- Specify action and method -->
+                <div class="form-group">
+                    <label for="userId">Faculty ID</label>
+                    <input type="text" name="userId" class="form-control" id="userId" placeholder="Enter Faculty ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="emailPrefix">Email Address</label>
+                    <div class="input-group">
+                        <input type="text" name="emailPrefix" class="form-control" id="emailPrefix" placeholder="Enter Email Prefix" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text">@apsit.edu.in</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Enter Password" required>
+                    <small class="form-text text-muted">Password must be at least 8 characters long, contain one uppercase letter, one number, and one special character.</small>
+                    <span class="warning" id="passwordWarning">Password does not meet the required format!</span>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select name="role" class="form-control" id="role" required>
+                        <option value="">Select Role</option> <!-- Add a default empty option -->
+                        <option>Faculty</option>
+                        <option>Higher Authority</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <select name="department" class="form-control" id="department" required>
+                        <option value="">Select Department</option> <!-- Add a default empty option -->
+                        <option>IT</option>
+                        <option>MECH</option>
+                        <option>CIVIL</option>
+                        <option>CS</option>
+                        <option>AIML</option>
+                        <option>DS</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+            <div class="signup-links">
+                <a href="/login">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var passwordWarning = document.getElementById("passwordWarning");
+
+            // Password validation (at least 8 characters, one uppercase letter, one number, one special character)
+            var passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            
+            if (!passwordPattern.test(password)) {
+                passwordWarning.style.display = "block";
+                return false; // Prevent form submission
+            } else {
+                passwordWarning.style.display = "none";
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

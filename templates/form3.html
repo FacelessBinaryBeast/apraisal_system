@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forms3</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin-bottom: 20px;
+        }
+
+        .acr-container,
+        .teaching-process-container {
+            margin-top: 150px;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .top-bar a:hover {
+            text-decoration: underline;
+        }
+
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+
+        .table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 50px;
+            padding: 20px;
+            width: 100%; /* Ensure full width */
+        }
+    
+        .table-box {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1200px; /* Increase max-width for wider content */
+            text-align: center;
+            margin-bottom: 40px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .table-box:hover {
+            transform: scale(1.02);
+        }
+
+        .table-title {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #00796b;
+            transition: color 0.3s;
+        }
+
+        .table-title:hover {
+            color: #004d40;
+        }
+
+        .total-box {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+            transition: color 0.3s;
+        }
+
+        /* Spacing between forms */
+        .form-section {
+            margin-bottom: 50px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .self-assessment-container {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .self-assessment-container label {
+            font-weight: bold;
+            color: #00796b;
+        }
+
+        /* Small input for 2-digit marks */
+        .self-assessment-container input {
+            width: 60px;
+            display: inline-block;
+        }
+
+        .instructions {
+            font-weight: bold;
+            text-align: left;
+            margin-left: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        .total-box {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            color: rgb(248, 254, 254);
+            background-color: rgba(72, 69, 69, 0.7);
+            padding: 10px;
+            border-radius: 8px;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .upload-download-buttons {
+            display: none;
+            margin-left: 20px;
+        }
+        .acr-container {
+            background-color: #85ccc4; /* White background for ACR section */
+            padding: 20px; /* Padding inside the ACR container */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+            margin-bottom: 20px; /* Space below the ACR section */
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+       
+        <a href="/logout">Logout</a>
+    </div>
+
+<!-- Logo -->
+<a href="/landing" class="logo-link">
+    <img src="/static/logo.png" alt="Logo">
+</a>
+
+<div class="table-container acr-container">
+    <h3 class="table-title">Annual Confidential Report (ACR)</h3>
+    <div class="instructions">
+        <p>
+            1. Standard editable templates are provided for both options. Please download the appropriate template and complete it as required.<br><br>
+            2. You may modify the format and include additional information as necessary in the Word document. Ensure that all provided details are accurate and supported by valid documentation.<br><br>
+            3. Once completed, upload the file in PDF format (file size must not exceed 1 MB).<br><br>
+            4. The maximum score for each option is 10. At the end, the average of the scores from both options will be calculated, and the final marks will be awarded out of 10.
+        </p>
+    </div>
+
+    <!-- Checkboxes for options -->
+    <div class="checkboxes">
+        <label>
+            <input type="checkbox" id="selfImprovementCheckbox" onchange="toggleSelfImprovementTable()"> Self-Improvement Initiatives
+        </label>
+        <label>
+            <input type="checkbox" id="representingCollegeCheckbox" onchange="toggleRepresentingCollegeTable()"> Representing College in External Environment
+        </label>
+    </div>
+
+    <!-- Container for Self-Improvement Initiatives -->
+    <div id="selfImprovementTableContainer" style="display: none;">
+        <!-- Table for Self-Improvement Initiatives -->
+        <h4>Self-Improvement Initiatives</h4>
+        <table class="table table-bordered" id="selfImprovementTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Title of paper published in International conference</th>
+                    <th>Month/year</th>
+                    <th>Name of conference</th>
+                    <th>ISBN/ISSN Number</th>
+                    <th>Name Co-authors</th>
+                    <th>Online link</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="form-control" title="Enter Title of paper"></td>
+                    <td><input type="text" class="form-control" title="Enter Month/Year"></td>
+                    <td><input type="text" class="form-control" title="Enter Name of conference"></td>
+                    <td><input type="text" class="form-control" title="Enter ISBN/ISSN Number"></td>
+                    <td><input type="text" class="form-control" title="Enter Name of Co-authors"></td>
+                    <td><input type="url" class="form-control" title="Enter Online link"></td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this, 'selfImprovementTable')">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addSelfImprovementRow()">+</button>
+
+        <!-- Table for Certifications -->
+        <h4>Certifications</h4>
+        <table class="table table-bordered" id="certificationTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Name of the Certification</th>
+                    <th>Upload Document</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="form-control" title="Enter Name of the Certification"></td>
+                    <td>
+                        <input type="file" class="form-control-file" onchange="uploadDocument(this)">
+                        <div class="upload-status"></div>
+                    </td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this, 'certificationTable')">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addCertificationRow()">+</button>
+
+        <!-- Table for Titles -->
+        <h4>Name of Copyrights published</h4>
+        <table class="table table-bordered" id="titleTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Name of the Title</th>
+                    <th>Month/year</th>
+                    <th>Registration Number</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="form-control" title="Enter Name of the Title"></td>
+                    <td><input type="text" class="form-control" title="Enter Month/Year"></td>
+                    <td><input type="text" class="form-control" title="Enter Registration Number"></td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this, 'titleTable')">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addTitleRow()">+</button>
+    </div>
+
+    <!-- Container for Representing College in External Environment -->
+    <div id="representingCollegeTableContainer" style="display: none;">
+        <!-- Table for Resource person in STTP/Training course/ Lecture Talks -->
+        <h4>Resource person in STTP/Training course/ Lecture Talks</h4>
+        <table class="table table-bordered" id="resourcePersonTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Topic Name</th>
+                    <th>Department</th>
+                    <th>Name of the institute</th>
+                    <th>Number of participants</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="form-control" title="Enter Topic Name"></td>
+                    <td><input type="text" class="form-control" title="Enter Department"></td>
+                    <td><input type="text" class="form-control" title="Enter Name of the institute"></td>
+                    <td><input type="number" class="form-control" title="Enter Number of participants"></td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this, 'resourcePersonTable')">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addResourcePersonRow()">+</button>
+
+        <!-- Table for Member of University Committee -->
+        <h4>Member of University Committee</h4>
+        <table class="table table-bordered" id="universityCommitteeTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Name of Committee</th>
+                    <th>Roles and Responsibilities</th>
+                    <th>Designation</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="form-control" title="Enter Name of Committee"></td>
+                    <td><input type="text" class="form-control" title="Enter Roles and Responsibilities"></td>
+                    <td><input type="text" class="form-control" title="Enter Designation"></td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this, 'universityCommitteeTable')">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addUniversityCommitteeRow()">+</button>
+
+        <!-- Table for External Projects/Competitions Participations -->
+        <h4>External Projects/Competitions Participations</h4>
+        <table class="table table-bordered" id="externalProjectsTable">
+            <thead>
+                <tr>
+                    <th>Sr No.</th>
+                    <th>Role</th>
+                    <th>Description</th>
+                    <th>Contribution</th>
+                    <th>University</th>
+                    <th>Duration</th>
+                    <th>Comments</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" class="form-control" title="Enter Role"></td>
+                    <td><input type="text" class="form-control" title="Enter Description"></td>
+                    <td><input type="text" class="form-control" title="Enter Contribution"></td>
+                    <td><input type="text" class="form-control" title="Enter University"></td>
+                    <td><input type="text" class="form-control" title="Enter Duration"></td>
+                    <td><input type="text" class="form-control" title="Enter Comments"></td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this, 'externalProjectsTable')">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addExternalProjectsRow()">+</button>
+    </div>
+
+<!-- Self-Assessment Marks Input -->
+<div class="self-assessment">
+    <h4>Self-Assessment Marks</h4>
+    <input type="number" class="form-control" id="selfAssessmentMarks" min="0" max="10" placeholder="Enter marks (0-10)">
+    <small class="form-text text-muted">Please enter your self-assessment marks out of 10.</small>
+</div>
+
+
+</div>
+    
+      <!-- Contribution to Society Form -->
+<div class="table-container teaching-process-container">
+    <div class="table-box">
+        <h3 class="table-title">Contribution to Society</h3>
+
+        <div class="instructions">
+            <p>
+                1. The faculty member will earn 5 points per semester for different initiatives by AICTE (Induction programme, NSS activities,
+                Unnat Bharat Abhiyaan, Yoga Classes, Blood donation, awareness activities for environment protection/ethics and other similar activities)
+                having a direct impact on society.<br><br>
+                2. The claim should be supported by an office order/ official communication from Head of Institute.
+            </p>
+        </div>
+
+        <table class="table table-bordered" id="contributionTable">
+            <thead>
+                <tr>
+                    
+                        <th style="width: 5%;">Sr No.</th>
+                        <th style="width: 15%;">Semester</th>
+                        <th style="width: 25%;">Activity</th>
+                        <th style="width: 10%;">Points</th>
+                        <th style="width: 20%;">Order Copy</th>
+                        <th style="width: 20%;">Upload Document</th>
+                        <th style="width: 5%;">Action</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>
+                        <select class="form-control" required title="Select Semester">
+                            <option value="">Select</option>
+                            <option value="I">I</option>
+                            <option value="II">II</option>
+                            <option value="III">III</option>
+                            <option value="IV">IV</option>
+                            <option value="V">V</option>
+                            <option value="VI">VI</option>
+                            <option value="VII">VII</option>
+                            <option value="VIII">VIII</option>
+                        </select>
+                    </td>
+                    <td><input type="text" class="form-control" title="Enter Activity"></td>
+                    <td><input type="number" class="form-control points" title="Enter Points" min="0" max="3" oninput="calculateTeachingTotal()"></td>
+                    <td><input type="text" class="form-control" title="Enter Order Copy"></td>
+                    <td>
+                        <input type="file" class="form-control-file" onchange="uploadDocument(this)"> <!-- Upload Document Input -->
+                        <div class="upload-status"></div>
+                    </td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this, 'contributionTable')">-</button></td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success" onclick="addContributionRow()">+</button>
+    </div>
+    <div class="total-box">
+        Total Points: <span id="totalsocietyPoints">0</span>/10
+    </div>
+</div>  
+<input type="hidden" id="formId" value="{{ form_id }}">
+
+    <!-- Reset and Next Buttons -->
+    <div class="button-container">
+        <button class="btn btn-secondary" onclick="resetAll()">Reset All</button>
+        <button class="btn btn-primary mx-2" onclick="saveFormData()">Save</button>
+        <button class="btn btn-primary" onclick="goToNext()">Next</button>
+    </div>
+    <input type="hidden" id="formId" value="{{ form_id }}">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const formId = "{{ form_id }}"; // Get form_id passed from the Flask route
+        console.log("formId:", formId);
+    </script>
+
+    <script>
+function toggleSelfImprovementTable() {
+        const selfImprovementContainer = document.getElementById('selfImprovementTableContainer');
+        selfImprovementContainer.style.display = selfImprovementContainer.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleRepresentingCollegeTable() {
+        const representingCollegeContainer = document.getElementById('representingCollegeTableContainer');
+        representingCollegeContainer.style.display = representingCollegeContainer.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function removeRow(button, tableId) {
+        const row = button.parentNode.parentNode;
+        const table = document.getElementById(tableId);
+        table.deleteRow(row.rowIndex);
+    }
+
+    function addSelfImprovementRow() {
+        const table = document.getElementById('selfImprovementTable');
+        const rowCount = table.rows.length;
+        const newRow = table.insertRow(rowCount);
+        newRow.innerHTML = `
+            <td>${rowCount }</td>
+            <td><input type="text" class="form-control" title="Enter Title of paper"></td>
+            <td><input type="text" class="form-control" title="Enter Month/Year"></td>
+            <td><input type="text" class="form-control" title="Enter Name of conference"></td>
+            <td><input type="text" class="form-control" title="Enter ISBN/ISSN Number"></td>
+            <td><input type="text" class="form-control" title="Enter Name of Co-authors"></td>
+            <td><input type="url" class="form-control" title="Enter Online link"></td>
+            <td><button class="btn btn-danger" onclick="removeRow(this, 'selfImprovementTable')">-</button></td>
+        `;
+    }
+
+    function addCertificationRow() {
+        const table = document.getElementById('certificationTable');
+        const rowCount = table.rows.length;
+        const newRow = table.insertRow(rowCount);
+        newRow.innerHTML = `
+            <td>${rowCount }</td>
+            <td><input type="text" class="form-control" title="Enter Name of the Certification"></td>
+            <td><input type="file" class="form-control" title="Upload Document"></td>
+            <td><button class="btn btn-danger" onclick="removeRow(this, 'certificationTable')">-</button></td>
+        `;
+    }
+
+    function addTitleRow() {
+        const table = document.getElementById('titleTable');
+        const rowCount = table.rows.length;
+        const newRow = table.insertRow(rowCount);
+        newRow.innerHTML = `
+            <td>${rowCount }</td>
+            <td><input type="text" class="form-control" title="Enter Name of the Title"></td>
+            <td><input type="text" class="form-control" title="Enter Month/Year"></td>
+            <td><input type="text" class="form-control" title="Enter Registration Number"></td>
+            <td><button class="btn btn-danger" onclick="removeRow(this, 'titleTable')">-</button></td>
+        `;
+    }
+
+    function addResourcePersonRow() {
+        const table = document.getElementById('resourcePersonTable');
+        const rowCount = table.rows.length;
+        const newRow = table.insertRow(rowCount);
+        newRow.innerHTML = `
+            <td>${rowCount }</td>
+            <td><input type="text" class="form-control" title="Enter Topic Name"></td>
+            <td><input type="text" class="form-control" title="Enter Department"></td>
+            <td><input type="text" class="form-control" title="Enter Name of the institute"></td>
+            <td><input type="number" class="form-control" title="Enter Number of participants"></td>
+            <td><button class="btn btn-danger" onclick="removeRow(this, 'resourcePersonTable')">-</button></td>
+        `;
+    }
+
+    function addUniversityCommitteeRow() {
+        const table = document.getElementById('universityCommitteeTable');
+        const rowCount = table.rows.length;
+        const newRow = table.insertRow(rowCount);
+        newRow.innerHTML = `
+            <td>${rowCount }</td>
+            <td><input type="text" class="form-control" title="Enter Name of Committee"></td>
+            <td><input type="text" class="form-control" title="Enter Roles and Responsibilities"></td>
+            <td><input type="text" class="form-control" title="Enter Designation"></td>
+            <td><button class="btn btn-danger" onclick="removeRow(this, 'universityCommitteeTable')">-</button></td>
+        `;
+    }
+
+    function addExternalProjectsRow() {
+        const table = document.getElementById('externalProjectsTable');
+        const rowCount = table.rows.length;
+        const newRow = table.insertRow(rowCount);
+        newRow.innerHTML = `
+            <td>${rowCount }</td>
+            <td><input type="text" class="form-control" title="Enter Role"></td>
+            <td><input type="text" class="form-control" title="Enter Description"></td>
+            <td><input type="text" class="form-control" title="Enter Contribution"></td>
+            <td><input type="text" class="form-control" title="Enter University"></td>
+            <td><input type="text" class="form-control" title="Enter Duration"></td>
+            <td><input type="text" class="form-control" title="Enter Comments"></td>
+            <td><button class="btn btn-danger" onclick="removeRow(this, 'externalProjectsTable')">-</button></td>
+        `;
+    }
+
+function updateRowNumbers(tableId) {
+    const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+    const rows = table.rows;
+    for (let i = 0; i < rows.length; i++) {
+        rows[i].cells[0].innerText = i + 1; // Update the Sr No. cell
+    }
+}
+
+
+        // Add new row to Contribution to Society form
+        function addContributionRow() {
+            let table = document.getElementById("contributionTable");
+            let row = table.insertRow();
+            row.innerHTML = `
+                <td>${table.rows.length -1 }</td>
+                <td>
+                            <select class="form-control" required title="Select Semester">
+                                <option value="">Select</option>
+                                <option value="I">I</option>
+                                <option value="II">II</option>
+                                <option value="III">III</option>
+                                <option value="IV">IV</option>
+                                <option value="V">V</option>
+                                <option value="VI">VI</option>
+                                <option value="VII">VII</option>
+                                <option value="VIII">VIII</option>
+                            </select>
+                        </td>
+                <td><input type="text" class="form-control" title="Enter Activity"></td>
+                <td><input type="number" class="form-control points" title="Enter Points" min="0" max="3" oninput="calculateTeachingTotal();"></td>
+                <td><input type="text" class="form-control" title="Enter Order Copy"></td>
+                <td>
+                        <input type="file" class="form-control-file" onchange="uploadDocument(this)"> <!-- Upload Document Input -->
+                        <div class="upload-status"></div>
+                    </td>
+                <td><button class="btn btn-danger" onclick="removeRow(this, 'contributionTable')">-</button></td>
+            `;
+        }
+
+        // Remove row from Contribution to Society form
+        function removeRow(button, tableId) {
+            let table = document.getElementById(tableId);
+            table.deleteRow(button.parentNode.parentNode.rowIndex - 0);
+            calculateTeachingTotal();
+        }
+
+        // Calculate the total points for Contribution to Society
+        function calculateTeachingTotal() {
+            let pointsInputs = document.getElementsByClassName("points");
+            let total = 0;
+            for (let i = 0; i < pointsInputs.length; i++) {
+                total += parseFloat(pointsInputs[i].value) || 0;
+            }
+            document.getElementById("totalsocietyPoints").textContent = total.toFixed(2);
+        }
+
+        // Toggle display of upload/download buttons
+        function toggleUploadDownload(section) {
+            let checkbox = document.getElementById(section + 'Checkbox');
+            let buttons = document.getElementById(section + 'Buttons');
+            buttons.style.display = checkbox.checked ? 'inline-block' : 'none';
+        }
+
+        // Reset all inputs
+        function resetAll() {
+            document.querySelectorAll('input').forEach(input => input.value = '');
+            document.getElementById("totalsocietyPoints").textContent = "0";
+        }
+
+        // Save form data (you would implement backend integration here)----------------------------------------------------------------------------------------------------
+      
+        
+
+    // Collect the form data from various tables dynamically
+function saveFormData() {
+    const formData = new FormData();
+
+    // Collect form ID
+    const formId = document.getElementById('formId').value;
+    formData.append('formId', formId);
+
+    // Define the table configurations
+    const tables = [
+        {
+            id: 'selfImprovementTable',
+            prefix: 'selfImprovement',
+            fields: [
+                { title: 'title', inputType: 'input[title="Enter Title of paper"]' },
+                { title: 'monthYear', inputType: 'input[title="Enter Month/Year"]' },
+                { title: 'conference', inputType: 'input[title="Enter Name of conference"]' },
+                { title: 'isbn', inputType: 'input[title="Enter ISBN/ISSN Number"]' },
+                { title: 'coAuthors', inputType: 'input[title="Enter Name of Co-authors"]' },
+                { title: 'link', inputType: 'input[title="Enter Online link"]' },
+            ],
+        },
+        {
+            id: 'certificationTable',
+            prefix: 'certification',
+            fields: [
+                { title: 'name', inputType: 'input[title="Enter Name of the Certification"]' },
+                { title: 'file', inputType: 'input[type="file"]' },
+            ],
+        },
+        {
+            id: 'titleTable',
+            prefix: 'title',
+            fields: [
+                { title: 'name', inputType: 'input[title="Enter Name of the Title"]' },
+                { title: 'monthYear', inputType: 'input[title="Enter Month/Year"]' },
+                { title: 'registration', inputType: 'input[title="Enter Registration Number"]' },
+            ],
+        },
+        {
+            id: 'resourcePersonTable',
+            prefix: 'resourcePerson',
+            fields: [
+                { title: 'topic', inputType: 'input[title="Enter Topic Name"]' },
+                { title: 'department', inputType: 'input[title="Enter Department"]' },
+                { title: 'institute', inputType: 'input[title="Enter Name of the institute"]' },
+                { title: 'participants', inputType: 'input[title="Enter Number of participants"]' },
+            ],
+        },
+        {
+            id: 'universityCommitteeTable',
+            prefix: 'universityCommittee',
+            fields: [
+                { title: 'committee', inputType: 'input[title="Enter Name of Committee"]' },
+                { title: 'responsibilities', inputType: 'input[title="Enter Roles and Responsibilities"]' },
+                { title: 'designation', inputType: 'input[title="Enter Designation"]' },
+            ],
+        },
+        {
+            id: 'externalProjectsTable',
+            prefix: 'externalProjects',
+            fields: [
+                { title: 'role', inputType: 'input[title="Enter Role"]' },
+                { title: 'description', inputType: 'input[title="Enter Description"]' },
+                { title: 'contribution', inputType: 'input[title="Enter Contribution"]' },
+                { title: 'university', inputType: 'input[title="Enter University"]' },
+                { title: 'duration', inputType: 'input[title="Enter Duration"]' },
+                { title: 'comments', inputType: 'input[title="Enter Comments"]' },
+            ],
+        },
+        {
+            id: 'contributionTable',
+            prefix: 'contribution',
+            fields: [
+                { title: 'semester', inputType: 'select[title="Select Semester"]' },
+                { title: 'activity', inputType: 'input[title="Enter Activity"]' },
+                { title: 'points', inputType: 'input[title="Enter Points"]' },
+                { title: 'orderCopy', inputType: 'input[title="Enter Order Copy"]' },
+                { title: 'file', inputType: 'input[type="file"]' },
+            ],
+        },
+    ];
+
+    tables.forEach(table => {
+        const rows = document.querySelectorAll(`#${table.id} tbody tr`);
+        rows.forEach(row => {
+            const entry = {};
+            table.fields.forEach(field => {
+                const element = row.querySelector(field.inputType);
+                if (element && element.value) {
+                    entry[field.title] = element.value;
+                    if (element.type === 'file' && element.files.length > 0) {
+                        formData.append(`${table.prefix}File[]`, element.files[0]);
+                    }
+                }
+            });
+            if (Object.keys(entry).length > 0) {  // Only append if entry is not empty
+                formData.append(`${table.prefix}[]`, JSON.stringify(entry));
+            }
+        });
+    });
+
+    fetch('/save-form3-data', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Data saved successfully');
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
+// upload function 
+function uploadDocument(input) {
+    const file = input.files[0];
+    const uploadStatus = input.nextElementSibling;
+
+    if (!file) {
+        alert("Please select a file to upload.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            uploadStatus.textContent = `Error: ${data.error}`;
+            uploadStatus.style.color = 'red';
+        } else {
+            uploadStatus.textContent = `Uploaded: ${data.filename}`;
+            uploadStatus.style.color = 'green';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        uploadStatus.textContent = 'Upload failed!';
+        uploadStatus.style.color = 'red';
+    });
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function goToNext() {
+    // Fetch input value correctly
+    let totalPoints = parseInt(document.getElementById('selfAssessmentMarks').value);
+    let totalPointsObtained = parseInt(document.getElementById('totalsocietyPoints').innerText);
+
+    console.log("Total acr Points: ", totalPoints);
+    console.log("Total contribution to society Points: ", totalPointsObtained);
+
+    // Ensure form ID is valid
+    let formId = document.getElementById('formId').value;
+
+    if (!formId || isNaN(totalPoints) || isNaN(totalPointsObtained)) {
+        console.error("Invalid form ID or points.");
+        alert("Error: Please ensure all form data is filled correctly.");
+        return;
+    }
+
+    let overallTotal = totalPoints + totalPointsObtained;
+
+    // Log the data being sent
+    console.log(JSON.stringify({
+        form_id: formId,
+        total: overallTotal,
+        acr: totalPoints,
+        society: totalPointsObtained
+    }));
+
+    // Send AJAX request
+    $.ajax({
+        url: '/save-3total-points',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            form_id: formId,
+            total: overallTotal,
+            acr: totalPoints,
+            society: totalPointsObtained
+        }),
+        success: function(response) {
+            // Redirect to /review with form ID
+            window.location.href = "/review/" + formId;
+        },
+        error: function(error) {
+            console.error("Error saving total points:", error);
+            alert("There was an error saving the total points. Please try again.");
+        }
+    });
+}
+
+
+
+    </script>
+</body>
+
+</html>

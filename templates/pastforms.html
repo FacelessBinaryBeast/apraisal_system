@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Forms</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .top-bar a:hover {
+            text-decoration: underline;
+            color: #ff9800;
+        }
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+        .container {
+            margin-top: 150px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            text-align: center;
+        }
+        .table-container {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+        <a href="/landing">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <a href="/landing" class="logo-link">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        <h2>Select Academic Year</h2>
+        
+
+        <form id="academicForm" method="POST" action="{{ url_for('search_pastforms') }}">
+            <div class="form-group">
+                <label for="academicYear">Academic Year:</label>
+                <select class="form-control" id="academicYear" name="academicYear"></select>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+ <pre></pre>
+    <!-- Table to display teaching data if available -->
+    {% if teaching_data %}
+    <div class="table-container">
+        <h3>Teaching Process for Academic Year: {{ selected_year }}</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Semester</th>
+                    <th>Course Code/Name</th>
+                    <th>Classes Scheduled (S)</th>
+                    <th>Classes Held (H)</th>
+                    <th>Points (H/S) * 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in teaching_data %}
+                <tr>
+                    <td>{{ row[0] }}</td> <!-- Semester -->
+                    <td>{{ row[1] }}</td> <!-- Course Code/Name -->
+                    <td>{{ row[2] }}</td> <!-- Classes Scheduled (S) -->
+                    <td>{{ row[3] }}</td> <!-- Classes Held (H) -->
+                    <td>{{ row[4] }}</td> <!-- Points (H/S) * 5 -->
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">No data available for the selected academic year.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    {% endif %}
+    <pre></pre>
+
+    {% if feedback_data %}
+    <div class="table-container">
+        <h3>Student Feedback for Academic Year: {{ selected_year }}</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Semester</th>
+                    <th>Course Code</th>
+                    <th>Total Points</th>
+                    <th>Points Obtained</th>
+                    <th>Uploaded Document</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in feedback_data %}
+                <tr>
+                    <td>{{ row[0] }}</td>  <!-- Semester -->
+                    <td>{{ row[1] }}</td>  <!-- Course Code -->
+                    <td>{{ row[2] }}</td>  <!-- Total Points -->
+                    <td>{{ row[3] }}</td>  <!-- Points Obtained -->
+                    <td>
+                        {% if row[4] %}
+                            <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" 
+                               target="_blank" class="btn btn-primary">
+                               View Document
+                            </a>
+                        {% else %}
+                            No Document
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+    {% endif %}
+    
+
+<pre></pre>
+{% if dept_act_data %}
+<div class="table-container">
+    <h3>Department Activities for Academic Year: {{ selected_year }}</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Activity</th>
+                <th>Points</th>
+                <th>Order Copy</th>
+                <th>Uploaded Document</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in dept_act_data %}
+            <tr>
+                <td>{{ row[0] }}</td> <!-- Semester -->
+                <td>{{ row[1] }}</td> <!-- Activity -->
+                <td>{{ row[2] }}</td> <!-- Points -->
+                <td>{{ row[3] }}</td> <!-- Order Copy -->
+                
+                <td>
+                    {% if row[4] %}
+                        <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" 
+                           target="_blank" class="btn btn-primary">
+                           View Document
+                        </a>
+                    {% else %}
+                        No Document
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No department activities available for the selected academic year.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endif %}
+<pre></pre>
+{% if inst_act_data %}
+<div class="table-container">
+    <h3>Institute Activities for Academic Year: {{ selected_year }}</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Activity</th>
+                <th>Points</th>
+                <th>Order Copy</th>
+                <th>Uploaded Document</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in inst_act_data %}
+            <tr>
+                <td>{{ row[0] }}</td> <!-- Semester -->
+                <td>{{ row[1] }}</td> <!-- Activity -->
+                <td>{{ row[2] }}</td> <!-- Points -->
+                <td>{{ row[3] }}</td> <!-- Order Copy -->
+                <td>
+                    {% if row[4] %}
+                        <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" 
+                           target="_blank" class="btn btn-primary">
+                           View Document
+                        </a>
+                    {% else %}
+                        No Document
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No institute activities available for the selected academic year.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+{% endif %}
+            <pre></pre>
+
+
+
+            {% if self_improvement_data %}
+            <div class="table-container">
+                <h3>ACR : {{ selected_year }}</h3>
+            <div class="table-container">
+                <h3>Self-Improvement Initiatives for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Month</th>
+                            <th>Name of Conference</th>
+                            <th>ISSN</th>
+                            <th>Co-authors</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in self_improvement_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Title -->
+                            <td>{{ row[1] }}</td>  <!-- Month -->
+                            <td>{{ row[2] }}</td>  <!-- Name of Conference -->
+                            <td>{{ row[3] }}</td>  <!-- ISSN -->
+                            <td>{{ row[4] }}</td>  <!-- Co-authors -->
+                            <td>
+                                <a href="{{ row[5] }}" target="_blank" class="btn btn-primary">View Link</a> <!-- Link -->
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+            
+            {% if certification_data %}
+            <div class="table-container">
+                <h3>Certifications for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Uploaded Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in certification_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>
+                                {% if row[1] %}
+                                    <a href="{{ url_for('uploaded_file', filename=row[1].split('/')[-1]) }}" target="_blank" class="btn btn-primary">
+                                       View Document
+                                    </a>
+                                {% else %}
+                                    No Document
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if title_data %}
+            <div class="table-container">
+                <h3>Copyright Titles for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Month</th>
+                            <th>Registration Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in title_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>{{ row[1] }}</td>  <!-- Month -->
+                            <td>{{ row[2] }}</td>  <!-- Registration Number -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if resource_data %}
+            <div class="table-container">
+                <h3>Resource Persons for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Name of Institute</th>
+                            <th>Number of Participants</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in resource_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>{{ row[1] }}</td>  <!-- Department -->
+                            <td>{{ row[2] }}</td>  <!-- Name of Institute -->
+                            <td>{{ row[3] }}</td>  <!-- Number of Participants -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if committee_data %}
+            <div class="table-container">
+                <h3>University Committee Members for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Roles</th>
+                            <th>Designation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in committee_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Name -->
+                            <td>{{ row[1] }}</td>  <!-- Roles -->
+                            <td>{{ row[2] }}</td>  <!-- Designation -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <pre></pre>
+
+            {% if project_data %}
+            <div class="table-container">
+                <h3>External Projects for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Description</th>
+                            <th>Contribution</th>
+                            <th>University</th>
+                            <th>Duration</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in project_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Role -->
+                            <td>{{ row[1] }}</td>  <!-- Description -->
+                            <td>{{ row[2] }}</td>  <!-- Contribution -->
+                            <td>{{ row[3] }}</td>  <!-- University -->
+                            <td>{{ row[4] }}</td>  <!-- Duration -->
+                            <td>{{ row[5] }}</td>  <!-- Comments -->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            {% endif %}
+            <div>
+            
+        </div>
+            <pre></pre>
+
+            {% if contribution_data %}
+            <div class="table-container">
+                <h3>Contributions to Society for Academic Year: {{ selected_year }}</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Semester</th>
+                            <th>Activity</th>
+                            <th>Points</th>
+                            <th>Order Copy</th>
+                            <th>Uploaded Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in contribution_data %}
+                        <tr>
+                            <td>{{ row[0] }}</td>  <!-- Semester -->
+                            <td>{{ row[1] }}</td>  <!-- Activity -->
+                            <td>{{ row[2] }}</td>  <!-- Points -->
+                            <td>{{ row[3] }}</td>  <!-- Order Copy -->
+                            <td>
+                                {% if row[4] %}
+                                    <a href="{{ url_for('uploaded_file', filename=row[4].split('/')[-1]) }}" target="_blank" class="btn btn-primary">
+                                       View Document
+                                    </a>
+                                {% else %}
+                                    No Document
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+               
+            </div>
+            {% endif %}
+            
+
+             <pre> </pre>
+
+            {% if points_data %}
+<div class="table-container">
+    <h3>Final Score:</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Criteria</th>
+                <th>Maximum Points</th>
+                <th>Points Earned</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Teaching Process</td>
+                <td>25</td>
+                <td>{{ points_data['teaching'] }}</td>
+            </tr>
+            <tr>
+                <td>Students' Feedback</td>
+                <td>25</td>
+                <td>{{ points_data['feedback'] }}</td>
+            </tr>
+            <tr>
+                <td>Departmental Activities</td>
+                <td>20</td>
+                <td>{{ points_data['dept'] }}</td>
+            </tr>
+            <tr>
+                <td>Institute Activity</td>
+                <td>10</td>
+                <td>{{ points_data['institute'] }}</td>
+            </tr>
+            <tr>
+                <td>ACR</td>
+                <td>10</td>
+                <td>{{ points_data['acr'] }}</td>
+            </tr>
+            <tr>
+                <td>Contribution to Society</td>
+                <td>10</td>
+                <td>{{ points_data['society'] }}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th>100</th>
+                <th>{{ points_data['teaching']|int + points_data['feedback']|int + points_data['dept']|int 
+                    + points_data['institute']|int + points_data['acr']|int + points_data['society']|int }}</th>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+{% endif %}
+<div class="text-center">
+    <a href="/landing" class="btn btn-primary">Home</a>
+</div>
+<pre></pre>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Script for dynamically generating academic years -->
+    <script>
+       function generateAcademicYears() {
+    const currentYear = new Date().getFullYear();
+    const month = new Date().getMonth(); // Get the current month (0 = January, 11 = December)
+    const dropdown = document.getElementById('academicYear');
+
+    // Determine the start year of the current academic year
+    const academicStartYear = month >= 8 ? currentYear : currentYear - 1; // Academic year starts in September
+
+    // Generate options for the current and last 4 academic years
+    for (let i = 0; i <= 4; i++) {
+        const startYear = academicStartYear - i;
+        const endYear = startYear + 1;
+        const option = document.createElement('option');
+        option.value = `${startYear}/${endYear.toString().slice(-2)}`;
+        option.text = `${startYear}/${endYear.toString().slice(-2)}`;
+        dropdown.appendChild(option);
+    }
+}
+
+// Call the function to populate the dropdown when the page loads
+window.onload = generateAcademicYears;
+
+    </script>
+</body>
+</html>

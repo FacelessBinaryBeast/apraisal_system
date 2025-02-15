@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructions</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .top-bar a:hover {
+            text-decoration: underline;
+            color: #ff9800; /* Highlight color */
+        }
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+        .content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Slightly darker shadow */
+            max-width: 600px;
+            position: relative;
+            top: 100px; /* Adjust this value to position below the logo and top bar */
+            margin-left: auto; /* Center align horizontally */
+            margin-right: auto; /* Center align horizontally */
+        }
+        .content:hover {
+            transform: scale(1.02); /* Slight zoom effect */
+        }
+        .content h3 {
+            margin-bottom: 20px;
+        }
+        .content p {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .content .form-check {
+            margin-bottom: 20px;
+        }
+        .btn-next {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-next:hover {
+            background-color: #ff9800;
+            transform: scale(1.05);
+        }
+        .table-container {
+            margin-top: 30px; /* Margin above the table */
+        }
+        .dropdown-container {
+            margin: 20px 0;
+            text-align: left;
+        }
+        .agreement p {
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+        
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <a href="/landing" class="logo-link">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h3>Instructions:</h3>
+        <p>
+            ● Self-appraisal is to be filled once in academic year.<br>
+            ● Assess your performance based on predefined criteria such as teaching process, student feedback, department activities, and institute activities.<br>
+            ● Faculty needs to assign the marks for his/her performance.<br>
+            ● This form can be customized by inserting relevant items from annexures with the form.<br>
+            ● The self-appraisal process is confidential. Ensure that your responses are honest and reflect your true performance and development needs.<br>
+            ● If you have questions about the form or the appraisal process, contact your department's administrative office or the appraisal coordinator for guidance.
+        </p>
+
+        <!-- Table Section -->
+        <div class="table-container">
+            <h4>Scoring Criteria:</h4>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>Maximum Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Teaching Process</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <td>Students’ Feedback</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <td>Departmental Activities</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <td>Institute Activity</td>
+                        <td>25</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong>100</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Form Section to Capture Academic Year -->
+        <form method="POST" action="/submit_academic_year">
+            <!-- Academic Year Dropdown -->
+            <div class="dropdown-container">
+                <label for="academicYear"><strong>Academic Year:</strong></label>
+                <select id="academicYear" name="academicYear" class="form-control">
+                    <!-- Options will be dynamically inserted here -->
+                </select>
+            </div>
+            <pre></pre>
+            <div class="agreement">
+      <p> I hereby declare that the information provided in this self-appraisal form is true, accurate, and complete to the best of my knowledge. 
+          I understand that any false information or misrepresentation may result in disciplinary action. Fill this form in one go , if filled again 
+          would be saved as a new form deleting previous entries</p>
+        </div>
+            <!-- Agreement Checkbox -->
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="agreeCheck">
+                <label class="form-check-label" for="agreeCheck">I Agree</label>
+            </div>
+
+            <!-- Next Button -->
+            <button type="submit" class="btn btn-primary btn-next" onclick="return validateForm()">Next</button>
+        </form>
+    </div>
+
+    <!-- Script for dynamically generating academic years and form validation -->
+    <script>
+        // Function to dynamically generate academic year options
+        function generateAcademicYears() {
+    const currentYear = new Date().getFullYear();
+    const month = new Date().getMonth(); // Get the current month (0 = January, 11 = December)
+    const dropdown = document.getElementById('academicYear');
+
+    // Determine the actual academic year based on the month
+    const academicStartYear = month >= 8 ? currentYear : currentYear - 1; // Academic year starts in September
+
+    // Generate options for the current and previous academic year
+    for (let i = 0; i <= 1; i++) {
+        const startYear = academicStartYear - i;
+        const endYear = startYear + 1;
+        const option = document.createElement('option');
+        option.value = `${startYear}/${endYear.toString().slice(-2)}`;
+        option.text = `${startYear}/${endYear.toString().slice(-2)}`;
+        dropdown.appendChild(option);
+    }
+}
+
+// Call the function to populate the dropdown when the page loads
+window.onload = generateAcademicYears;
+
+
+        // Form validation to ensure checkbox is checked before submission
+        function validateForm() {
+            const agreeCheck = document.getElementById('agreeCheck');
+            if (!agreeCheck.checked) {
+                alert('Please agree to the terms before proceeding.');
+                return false;
+            }
+            return true;  // Allow the form to submit
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

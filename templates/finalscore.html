@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Score</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .top-bar a:hover {
+            text-decoration: underline;
+            color: #ff9800; /* Highlight color */
+        }
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+        .content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9); /* Slightly more opaque */
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Slightly darker shadow */
+            max-width: 600px;
+            position: relative;
+            top: 100px; /* Adjust this value to position below the logo and top bar */
+            margin-left: auto; /* Center align horizontally */
+            margin-right: auto; /* Center align horizontally */
+        }
+        .content:hover {
+            transform: scale(1.02); /* Slight zoom effect */
+        }
+        .content h3 {
+            margin-bottom: 20px;
+        }
+        .content p {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .content .form-check {
+            margin-bottom: 20px;
+        }
+        .btn-next {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-next:hover {
+            background-color: #ff9800;
+            transform: scale(1.05);
+        }
+        .table-container {
+            margin-top: 30px; /* Margin above the table */
+        }
+        .dropdown-container {
+            margin: 20px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+       
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <a href="/landing" class="logo-link">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+
+    <!-- Content Section -->
+    <div class="content">
+        <h3>Final Score:</h3>
+        
+        <!-- Table Section -->
+        <div class="table-container">
+            <table class="table table-bordered" id="score-table">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>Maximum Points</th>
+                        <th>Points Earned</th> <!-- New column header -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Teaching Process</td>
+                        <td>25</td>
+                        <td id="teaching-points"></td> <!-- Cell for Points Earned -->
+                    </tr>
+                    <tr>
+                        <td>Students’ Feedback</td>
+                        <td>25</td>
+                        <td id="feedback-points"></td> <!-- Cell for Points Earned -->
+                    </tr>
+                    <tr>
+                        <td>Departmental Activities</td>
+                        <td>20</td>
+                        <td id="dept-points"></td> <!-- Cell for Points Earned -->
+                    </tr>
+                    <tr>
+                        <td>Institute Activity</td>
+                        <td>10</td>
+                        <td id="institute-points"></td> <!-- Cell for Points Earned -->
+                    </tr>
+                    <tr>
+                        <td>ACR</td>
+                        <td>10</td>
+                        <td id="acr-points"></td> <!-- Cell for Points Earned -->
+                    </tr>
+                    <tr>
+                        <td>Contribution to Society</td>
+                        <td>10</td>
+                        <td id="society-points"></td> <!-- Cell for Points Earned -->
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong>100</strong></td>
+                        <td id="total-points"><strong></strong></td> <!-- Cell for Total Points Earned -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="button-container">
+            <button class="btn btn-primary" onclick="getscore()">Calculate Points Scored</button>
+        </div>
+        <!-- Button to Review Form -->
+<div class="button-container">
+    <button class="btn btn-secondary" onclick="reviewForm()">Review Form</button>
+</div>
+
+<!-- Placeholder for dynamic content -->
+<div id="review-form-container"></div>
+
+        <a href="/landing">Home</a>
+    </div>
+    <input type="hidden" id="formId" value="{{ form_id }}">
+    <input type="hidden" id="userId" value="{{ user_id }}"> <!-- Hidden user ID -->
+    <script>
+        const userId = document.getElementById('userId').value; // Now this should work correctly
+
+        
+        const formId = "{{ form_id }}"; // Get form_id passed from the Flask route
+        
+
+        async function getscore() {
+    try {
+        const formId = document.getElementById('formId').value;
+        const userId = document.getElementById('userId').value;
+        
+        // Fetch scores including user_id and academic year
+        const response = await fetch(`/get_scores/${formId}`);
+        const data = await response.json();
+
+        console.log(data); // Log the data to check its structure
+        
+        if (data.error) {
+            console.error('Error:', data.error);
+            return;
+        }
+
+        // Populate the table with the points earned
+        document.getElementById('teaching-points').innerText = data.teaching || 0;
+        document.getElementById('feedback-points').innerText = data.feedback || 0;
+        document.getElementById('dept-points').innerText = data.dept || 0;
+        document.getElementById('institute-points').innerText = data.institute || 0;
+        document.getElementById('acr-points').innerText = data.acr || 0;
+        document.getElementById('society-points').innerText = data.society || 0;
+
+        // Sanitize and convert values to numbers
+        const teachingPoints = Number((data.teaching || "0").trim());
+        const feedbackPoints = Number((data.feedback || "0").trim());
+        const deptPoints = Number((data.dept || "0").trim());
+        const institutePoints = Number((data.institute || "0").trim());
+        const acrPoints = Number((data.acr || "0").trim());
+        const societyPoints = Number((data.society || "0").trim());
+
+        // Calculate total points
+        const totalPoints = 
+            teachingPoints + 
+            feedbackPoints + 
+            deptPoints + 
+            institutePoints + 
+            acrPoints + 
+            societyPoints;
+
+        document.getElementById('total-points').innerText = totalPoints;
+
+        // Send the total points, formId, userId, and acad_years to the server for saving
+        await saveTotalPoints(totalPoints, formId, userId, data.acad_years);
+
+    } catch (error) {
+        console.error('Error fetching scores:', error);
+    }
+}
+
+async function saveTotalPoints(totalPoints, formId, userId, acad_years) {
+    try {
+        const response = await fetch('/save_total_points', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ totalPoints, formId, userId, acad_years }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save total points');
+        }
+    } catch (error) {
+        console.error('Error saving total points:', error);
+    }
+}
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

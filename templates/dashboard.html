@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .top-bar a:hover {
+            text-decoration: underline;
+        }
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+        .graph-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .graph-box {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .graph-title {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+        <a href="/highlanding">Home</a>
+        
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <a href="/highlanding" class="logo-link">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+
+    <!-- Graph and Controls -->
+    <div class="graph-container">
+        <!-- Dropdown and Refresh Button -->
+        <div class="d-flex align-items-center mb-3">
+            <select id="academicYear" class="form-control mr-2" style="width: 200px;"></select>
+            <button id="refreshButton" class="btn btn-primary">Refresh</button>
+        </div>
+
+        <!-- Graph Container -->
+        <div class="graph-box">
+            <h3 class="graph-title">Top 5  {{ department }}  Department Performers</h3>
+            <div id="noDataMessage" style="display:none; color: red;">No data available for the selected year.</div>
+            <canvas id="myBarChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Function to generate academic years and populate the dropdown
+        function generateAcademicYears() {
+            const currentYear = new Date().getFullYear();
+            const month = new Date().getMonth();
+            const dropdown = document.getElementById('academicYear');
+
+            // Clear existing options to avoid duplicates
+            dropdown.innerHTML = '';
+
+            const academicStartYear = month >= 8 ? currentYear : currentYear - 1;
+
+            for (let i = 0; i <= 4; i++) {
+                const startYear = academicStartYear - i;
+                const endYear = startYear + 1;
+                const option = document.createElement('option');
+                option.value = `${startYear}/${endYear.toString().slice(-2)}`;
+                option.text = `${startYear}/${endYear.toString().slice(-2)}`;
+                dropdown.appendChild(option);
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = generateAcademicYears;
+
+       
+
+        // Chart.js Bar Chart Initialization
+        var ctx = document.getElementById('myBarChart').getContext('2d');
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['name 1', 'name 2', 'name 3', 'name 4', 'name 5'],
+                datasets: [{
+                    label: 'Marks',
+                    data: [50, 75, 90, 60, 85],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        document.getElementById('refreshButton').addEventListener('click', async function () {
+    const academicYear = document.getElementById('academicYear').value;
+    const department = "{{ department }}";  // Make sure 'department' is properly passed from your backend
+
+    console.log(`Selected Academic Year: ${academicYear}`);  // Debug log to see selected academic year
+    console.log(`Department: ${department}`);  // Debug log
+
+    try {
+        // Fetch data from the backend
+        const response = await fetch('/get_top_performers', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ academic_year: academicYear, department: department })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const data = await response.json();
+        console.log("Received Data:", data);  // Debug log for received data
+
+        if (data.length > 0) {
+            const labels = data.map(item => item.name);
+            const values = data.map(item => item.total);
+
+            myBarChart.data.labels = labels;
+            myBarChart.data.datasets[0].data = values;
+            myBarChart.update();
+
+            document.getElementById('noDataMessage').style.display = 'none';  // Hide "No data" message
+        } else {
+            showNoDataMessage();
+        }
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        showNoDataMessage();
+    }
+});
+
+
+function showNoDataMessage() {
+    document.getElementById('noDataMessage').style.display = 'block';
+    myBarChart.data.labels = [];
+    myBarChart.data.datasets[0].data = [];
+    myBarChart.update();
+}
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Self-Appraisal System</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+        }
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .top-bar a:hover {
+            text-decoration: underline;
+            color: #ff9800;
+        }
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+        .welcome-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 2s;
+        }
+        .content-box h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333;
+            animation: slideIn 1.5s ease-in-out;
+        }
+        .content-box p {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .btn-custom {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-custom:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); }
+            to { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Right Links -->
+    <div class="top-bar">
+        <a href="/logout" data-toggle="tooltip" title="Log out of the system">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <a href="#" class="logo-link" data-toggle="tooltip" title="Go to Home">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+
+    <!-- Welcome Content -->
+    <div class="welcome-container">
+        <div class="content-box">
+            <h1>Welcome to the APSIT Self-Appraisal System</h1>
+            <p>As a higher authority, you can view the dashboard and review appraisal forms submitted by faculty members.</p>
+            
+            <!-- Buttons for Higher Authority -->
+            <a href="/dashboard?department={{ department }}" class="btn btn-primary btn-custom">View Dashboard</a>
+            <a href="/stafflist?department={{ department }}" class="btn btn-success btn-custom">Review Appraisal Forms by Faculty</a>
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip(); // Activate tooltips
+        });
+    </script>
+</body>
+</html>

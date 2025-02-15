@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/bgs.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+        .logo img {
+            width: 100px; /* Adjust logo size as needed */
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .login-links a {
+            display: block;
+            margin: 5px 0;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .login-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo">
+        <button class="btn btn-link">
+            <img src="/static/logo.png" alt="Logo">
+        </button>
+    </div>
+
+    <!-- Login Container -->
+    <div class="login-container">
+        <div class="login-box">
+            <h3 class="text-center">Login</h3>
+
+            <form action="/login" method="post">
+                <div class="form-group">
+                    <label for="loginId">Email</label>
+                    <div class="input-group">
+                        <input type="text" name="loginId" class="form-control" id="loginId" placeholder="Enter your username" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text">@apsit.edu.in</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Enter Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+                <a href="/register" class="btn btn-secondary btn-block mt-2">Sign Up</a>
+            </form>
+            <div class="login-links">
+                <a href="/forgotpass">Forgot Password?</a> <!-- Added link here -->
+            </div>
+        </div>
+    </div>
+<script>
+    // Check the status query parameter to show an alert if redirected
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+
+    if (status === 'reset_success') {
+        alert('Password reset successful! Please log in.');
+    }
+</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

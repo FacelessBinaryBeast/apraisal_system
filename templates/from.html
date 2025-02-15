@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Form 1</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+
+
+        body {
+            background: url('/static/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin-bottom: 20px;
+        }
+        
+        .teaching-process-container {
+            margin-top: 150px;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .top-bar a {
+            margin-left: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .top-bar a:hover {
+            text-decoration: underline;
+        }
+
+        .logo-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .logo-link img {
+            width: 90px;
+            height: auto;
+        }
+
+       /* Update the container to be wider */
+       .table-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 50px;
+            padding: 20px;
+            width: 100%; /* Ensure full width */
+        }
+    
+        .table-box {
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1200px; /* Increase max-width for wider content */
+            text-align: center;
+            margin-bottom: 40px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .table-box:hover {
+            transform: scale(1.02);
+        }
+
+        .table-title {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #00796b;
+            transition: color 0.3s;
+        }
+
+        .table-title:hover {
+            color: #004d40;
+        }
+
+        .total-box {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    color: rgb(248, 254, 254);
+    background-color: rgba(72, 69, 69, 0.7); /* Dark semi-transparent background */
+    padding: 10px; /* Add some padding for better spacing */
+    border-radius: 8px; /* Rounded corners for a nicer look */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+}
+
+
+        .total-box span {
+            font-size: 24px;
+            color: #ff9728;
+        }
+
+        .total-box span.flash {
+            animation: flash 1s ease-in-out infinite;
+        }
+
+        @keyframes flash {
+            0%, 100% {
+                color: #e6930d;
+            }
+
+            50% {
+                color: #eb8f1f;
+            }
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+        }
+
+        .table th,
+        .table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .table td:first-child {
+            width: 20%;
+        }
+
+        .table td:nth-child(2) {
+            width: 40%;
+        }
+
+        .table td:nth-child(3),
+        .table td:nth-child(4) {
+            width: 20%;
+        }
+
+        .table td:last-child {
+            width: 10%;
+        }
+
+        .table input.form-control {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .table input:focus {
+            border-color: #00796b;
+            box-shadow: 0 0 5px rgba(0, 121, 107, 0.5);
+        }
+
+        .btn-success,
+        .btn-primary,
+        .btn-secondary {
+            transition: background-color 0.3s ease;
+            
+        }
+
+        .btn-success:hover {
+            background-color: #00695c;
+        }
+
+        .btn-primary:hover {
+            background-color: #004d40;
+        }
+
+        .btn-secondary:hover {
+            background-color: #004d40;
+        }
+
+        /* Spacing between forms */
+        .form-section {
+            margin-bottom: 50px;
+        }
+
+        .undo-button {
+            display: inline-block;
+            margin-left: 20px;
+        }
+        .instructions {
+            font-weight: bold;
+    text-align: left;
+   
+    margin-left: 20px; /* Adjust the value as needed for spacing */
+    font-size: 14px; /* You can modify the font size as needed */
+    line-height: 1.6; /* Improves readability with proper line spacing */
+    padding: 10px; /* Adds some padding around the text */
+}
+
+input[required] {
+    border: 1px solid #ccc;  /* Default border */
+}
+
+input[required]:invalid {
+    border-color: red;  /* Red border for invalid inputs */
+}
+
+#flashMessage {
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+}
+
+.heading {
+    text-align: center;
+    font-size: 24px;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Logo -->
+    <a href="/landing" class="logo-link">
+        <img src="/static/logo.png" alt="Logo">
+    </a>
+    <div id="flashMessage" style="display:none; color: red; font-weight: bold; margin-bottom: 10px;"></div>
+    
+    <h1 class="heading">Form for {{ department }} Department</h1>
+
+
+   
+        <input type="hidden" name="user_id" value="{{ user_id }}">
+        <input type="hidden" name="form_id" value="{{ form_id }}">
+
+    <!-- Teaching Process Form -->
+<div class="table-container teaching-process-container">
+    <div class="table-box">
+        <h3 class="table-title">Teaching Process</h3>
+        <div class="instructions">
+            <p>
+                1. Enter the Semester (in roman) and the Subject name, <br>
+                the classes scheduled and held must be entered accurately.<br>
+                2. The marks for his/her performance will be calculated accordingly.<br>
+                3. Statistics of Lecture/Practical Conducted (Max Marks:5)
+            </p>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Semester</th>
+                    <th>Course Code/Name</th>
+                    <th>Classes Scheduled(S)</th>
+                    <th>Classes Held(H)</th>
+                    <th>Points (H/S)*5</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="classTable">
+                {% for row in teaching_data %}
+                <tr data-srno="{{ loop.index }}">
+                    <td class="sr-no">{{ loop.index }}</td>
+                    <td>
+                        <select class="form-control semester" required>
+                            <option value="">Select</option>
+                            <option value="I" {% if row[0] == 'I' %}selected{% endif %}>I</option>
+                            <option value="II" {% if row[0] == 'II' %}selected{% endif %}>II</option>
+                            <option value="III" {% if row[0] == 'III' %}selected{% endif %}>III</option>
+                            <option value="IV" {% if row[0] == 'IV' %}selected{% endif %}>IV</option>
+                            <option value="V" {% if row[0] == 'V' %}selected{% endif %}>V</option>
+                            <option value="VI" {% if row[0] == 'VI' %}selected{% endif %}>VI</option>
+                            <option value="VII" {% if row[0] == 'VII' %}selected{% endif %}>VII</option>
+                            <option value="VIII" {% if row[0] == 'VIII' %}selected{% endif %}>VIII</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control course-dropdown" required title="Select Course">
+                            <option value="">Select Course</option>
+                            {% if row[1] %}
+                                <option value="{{ row[1] }}" selected>{{ row[1] }}</option>
+                            {% endif %}
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control classes-scheduled" value="{{ row[2] }}" oninput="calculatePoints(this)" required></td>
+                    <td><input type="number" class="form-control classes-held" value="{{ row[3] }}" oninput="calculatePoints(this)" required></td>
+                    <td><input type="number" class="form-control points" value="{{ row[4] }}" readonly></td>
+                    <td><button class="btn btn-danger" onclick="removeRow(this)">-</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <button class="btn btn-success" onclick="addRow()">+</button>
+    </div>
+    <div class="total-box">
+        Total Points: <span id="totalPoints">0</span> /25
+    </div>
+</div>
+
+<!-- Students Feedback Form -->
+<div class="table-container form-section">
+    <div class="table-box">
+        <h3 class="table-title">Students Feedback</h3>
+        <div class="instructions">
+            <p>
+                1. Enter the points obtained through student feedback for each subject (max 5 per subject)<br>
+            </p>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Semester</th>
+                    <th>Course Code/Name</th>
+                    <th>Total Points</th>
+                    <th>Points Obtained</th>
+                    <th>Upload Document</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="feedbackTable">
+                {% for row in feedback_data %}
+                <tr data-srno="{{ loop.index }}">
+                    <td class="sr-no">{{ loop.index }}</td>
+                    <td>
+                        <select class="form-control semester" required>
+                            <option value="">Select</option>
+                            <option value="I" {% if row[0] == 'I' %}selected{% endif %}>I</option>
+                            <option value="II" {% if row[0] == 'II' %}selected{% endif %}>II</option>
+                            <option value="III" {% if row[0] == 'III' %}selected{% endif %}>III</option>
+                            <option value="IV" {% if row[0] == 'IV' %}selected{% endif %}>IV</option>
+                            <option value="V" {% if row[0] == 'V' %}selected{% endif %}>V</option>
+                            <option value="VI" {% if row[0] == 'VI' %}selected{% endif %}>VI</option>
+                            <option value="VII" {% if row[0] == 'VII' %}selected{% endif %}>VII</option>
+                            <option value="VIII" {% if row[0] == 'VIII' %}selected{% endif %}>VIII</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-control course-dropdown" required title="Select Course">
+                            <option value="">Select Course</option>
+                            {% if row[1] %}
+                                <option value="{{ row[1] }}" selected>{{ row[1] }}</option>
+                            {% endif %}
+                        </select>
+                    </td>
+                    <td><input type="number" class="form-control total-points" value="{{ row[2] }}" readonly></td>
+                    <td><input type="number" class="form-control points-obtained" value="{{ row[3] }}" min="0" max="5" oninput="calculateFeedbackTotal()" required></td>
+                    <td>
+                        {% if row.uploads %}
+                        <a href="{{ url_for('static', filename=row.uploads) }}" target="_blank">View Upload</a>
+                        {% endif %}
+                        <input type="file" class="form-control-file">
+                    </td>
+                    <td><button class="btn btn-danger" onclick="removeFeedbackRow(this)">-</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <button class="btn btn-success" onclick="addFeedbackRow()">+</button>
+    </div>
+    <div class="total-box">
+        Total Points : <span id="totalPointsObtained">0</span> /25
+    </div>
+</div>
+
+    <!-- Save, Reset, Next Buttons -->
+    <div class="container text-center mt-4">
+        <div id="errorContainer" style="color: red; font-weight: bold; margin-bottom: 10px;"></div>
+        <button class="btn btn-secondary mx-2" onclick="resetFields()">Reset</button>
+        <button class="btn btn-primary mx-2" onclick="validateAndSave()">Save</button>
+        <button class="btn btn-secondary mx-2" onclick="goToNext()">Next</button>
+    </div>
+
+    <input type="hidden" id="formId" value="{{ form_id }}">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Store the previous states for Undo functionality
+        let previousTeachingState = [];
+        let previousFeedbackState = [];
+
+        // Validation Function for individual fields
+        function validateField(field) {
+            // No need to show messages here since we are using a single error message
+            if (!field.value.trim()) {
+                field.style.borderColor = 'red';  // Highlight invalid field
+                return false;
+            } else {
+                field.style.borderColor = '';     // Reset field styling if valid
+                return true;
+            }
+        }
+
+        // Validate all fields in the form before saving
+        function validateAndSave() {
+            let isValid = true;
+
+            // Clear any previous error messages
+            const errorContainer = document.getElementById('errorContainer');
+            errorContainer.textContent = '';
+
+            // Validate Teaching Process form
+            document.querySelectorAll('#classTable input[required]').forEach(input => {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            });
+
+            // Validate Feedback form
+            document.querySelectorAll('#feedbackTable input[required]').forEach(input => {
+                if (!validateField(input)) {
+                    isValid = false;
+                }
+            });
+
+            // If all fields are valid, proceed to save form data
+            if (isValid) {
+                saveFormData();  // This is your form submission logic
+            } else {
+                // Show error message for invalid form
+                errorContainer.textContent = 'Please fill in all required fields.';
+            }
+        }
+
+        // Attach event listeners for real-time validation
+        document.querySelectorAll('#classTable input[required]').forEach(input => {
+            input.addEventListener('input', function() {
+                validateField(this);  // Validate on input
+            });
+        });
+
+        document.querySelectorAll('#feedbackTable input[required]').forEach(input => {
+            input.addEventListener('input', function() {
+                validateField(this);  // Validate on input
+            });
+        });
+
+ 
+    const userDepartment = "{{ department }}";  // Department passed from Flask
+
+
+    const commonFirstSecondSemCourses = {
+    "I": ["Mathematics-I", "Physics", "Chemistry", "Engineering Mechanics", "Basic Electrical Engineering", "Professional Ethics", "Physics Lab", "Chemistry Lab", "Engineering Mechanics Lab", "Basic Electrical Engineering Lab", "Professional Communication", "Workshop Practice-I"],
+    "II": ["Mathematics-II", "Physics-II", "Chemistry-II", "Data Structures", "Digital Electronics", "Data Structures Lab", "Digital Electronics Lab", "Workshop Practice-II"]
+};
+
+const coursesByDepartment = {
+    "Computer Engineering": {
+        ...commonFirstSecondSemCourses,
+        "III": [
+            "Engineering Mathematics-III",
+            "Discrete Structures and Graph Theory",
+            "Data Structure",
+            "Digital Logic & Computer Architecture",
+            "Computer Graphics",
+            "Data Structure Lab",
+            "Digital Logic & Computer Architecture Lab",
+            "Computer Graphics Lab",
+            "Skill Base Lab Course: Object Oriented Programming with Java",
+            "Mini Project – 1 A"
+        ],
+        "IV": [
+            "Engineering Mathematics-IV",
+            "Analysis of Algorithm",
+            "Database Management System",
+            "Operating System",
+            "Microprocessor",
+            "Analysis of Algorithm Lab",
+            "Database Management System Lab",
+            "Operating System Lab",
+            "Microprocessor Lab",
+            "Skill Base Lab Course: Python Programming",
+            "Mini Project 1-B"
+        ],
+        "V": [
+            "Theoretical Computer Science",
+            "Software Engineering",
+            "Computer Network",
+            "Data Warehousing & Mining",
+            "Department Level Optional Course-1",
+            "Software Engineering Lab",
+            "Computer Network Lab",
+            "Data Warehousing & Mining Lab",
+            "Business Comm. & Ethics II",
+            "Mini Project 2 A"
+        ],
+
+        "VI": [
+    "System Programming & Compiler Construction",
+    "Cryptography & System Security",
+    "Mobile Computing",
+    "Artificial Intelligence",
+    "Department Level Optional Course-2",
+    "System Programming & Compiler Construction Lab",
+    "Cryptography & System Security Lab",
+    "Mobile Computing Lab",
+    "Artificial Intelligence Lab",
+    "Skill-based Lab Course: Cloud Computing",
+    "Mini Project Lab: 2B"
+]
+    },
+    "Mechanical Engineering": {
+        ...commonFirstSecondSemCourses,
+        // Add additional semesters here
+        "III": [
+    "Engineering Mathematics III",
+    "Strength of Materials",
+    "Thermodynamics",
+    "Production Process I",
+    "Material Technology",
+    "Strength of Materials Lab",
+    "Production Process I Lab",
+    "Material Technology Lab",
+    "Workshop Practice II",
+    "Engineering Graphics & Design II"
+],
+"IV": [
+    "Engineering Mathematics IV",
+    "Fluid Mechanics",
+    "Theory of Machines I",
+    "Production Process II",
+    "Heat Transfer",
+    "Fluid Mechanics Lab",
+    "Theory of Machines I Lab",
+    "Production Process II Lab",
+    "Heat Transfer Lab",
+    "Workshop Practice III"
+],
+"V": [
+    "Dynamics of Machinery",
+    "Machine Design I",
+    "Industrial Engineering & Management",
+    "Mechatronics",
+    "Department Level Optional Course I",
+    "Dynamics of Machinery Lab",
+    "Machine Design I Lab",
+    "Mechatronics Lab",
+    "Industrial Engineering & Management Lab",
+    "Mini Project I"
+],
+"VI": [
+    "Heat and Mass Transfer",
+    "Machine Design II",
+    "Control Engineering",
+    "Department Level Optional Course II",
+    "Department Level Optional Course III",
+    "Heat and Mass Transfer Lab",
+    "Machine Design II Lab",
+    "Control Engineering Lab",
+    "Skill-based Lab Course",
+    "Mini Project II"
+],
+"VII": [
+    "Refrigeration and Air Conditioning",
+    "Finite Element Analysis",
+    "Department Level Optional Course IV",
+    "Department Level Optional Course V",
+    "Open Elective I",
+    "Refrigeration and Air Conditioning Lab",
+    "Finite Element Analysis Lab",
+    "Project Phase I",
+    "Comprehensive Viva"
+],
+"VIII": [
+    "Power Plant Engineering",
+    "Automobile Engineering",
+    "Department Level Optional Course VI",
+    "Open Elective II",
+    "Project Phase II",
+    "Power Plant Engineering Lab",
+    "Automobile Engineering Lab",
+    "Comprehensive Viva II"
+]
+    },
+
+
+    "IT": {
+        ...commonFirstSecondSemCourses,
+        "III": [
+            "Engineering Mathematics-III", "Data Structure and Analysis", 
+            "Database Management System", "Principle of Communication", 
+            "Paradigms and Computer Programming Fundamentals", 
+            "Data Structure Lab", "SQL Lab", 
+            "Computer Programming Paradigms Lab", 
+            "Java Lab (SBL)", 
+            "Mini Project – 1 A for Front-end/Backend Application using JAVA"
+        ],
+        "IV": [
+            "Engineering Mathematics-IV", "Computer Network and Network Design", 
+            "Operating System", "Automata Theory", 
+            "Computer Organization and Architecture", 
+            "Network Lab", "Unix Lab", 
+            "Microprocessor Lab", "Python Lab (SBL)", 
+            "Mini Project – 1 B for Python-based automation projects"
+        ],
+        "V": [
+            "Internet Programming", "Computer Network Security ", 
+            "Entrepreneurship and  E- business ", "Software Engineering ", 
+            "Department Optional Course-1", 
+            "IP Lab ", "Security Lab ", 
+            "DevOPs Lab", "Advance DevOPs Lab ",
+            "Professional Communication and Ethics-II", 
+            "Mini Project–2 A"
+        ],
+        "VI": [
+    "Software Engineering",
+    "System Programming and Operating System",
+    "Computer Networks",
+    "Department Level Optional Course-I",
+    "Department Level Optional Course-II",
+    "Software Engineering Lab",
+    "System Programming and Operating System Lab",
+    "Computer Networks Lab",
+    "Skill-Based Lab Course-III",
+    "Mini Project 2B"
+],
+"VII": [
+    "Distributed Systems",
+    "Artificial Intelligence",
+    "Department Level Optional Course-III",
+    "Department Level Optional Course-IV",
+    "Institute Level Optional Course-I",
+    "Distributed Systems Lab",
+    "Artificial Intelligence Lab",
+    "Major Project-Part I"
+],
+"VIII": [
+    "Cloud Computing",
+    "Information and Cyber Security",
+    "Department Level Optional Course-V",
+    "Institute Level Optional Course-II",
+    "Major Project-Part II"
+]
+        // Add additional semesters here
+    },
+    "Civil Engineering": {
+        ...commonFirstSecondSemCourses,
+        "III": [
+            "Engineering Mathematics-III", "Mechanics of Solids", "Engineering Geology", 
+            "Architectural Planning & Design of Buildings", "Fluid Mechanics-I", 
+            "Skill-Based Lab Course-I", "Mini Project-1A"
+        ],
+        "IV": [
+            "Engineering Mathematics-IV", "Structural Analysis", "Surveying", 
+            "Building Materials & Concrete Technology", "Fluid Mechanics-II", 
+            "Skill-Based Lab Course-II", "Mini Project-1B"
+        ],
+        "V": [
+            "Theory of Reinforced Concrete Structures", "Applied Hydraulics", 
+            "Geotechnical Engineering-I", "Transportation Engineering", 
+            "Department Level Optional Course-1", "Professional Communication and Ethics", 
+            "Mini Project 2A"
+        ],
+        "VI": [
+            "Design & Drawing of Steel Structures", "Water Resources Engineering", 
+            "Geotechnical Engineering-II", "Environmental Engineering", 
+            "Department Level Optional Course-2", "Skill-Based Lab Course-III", 
+            "Mini Project 2B"
+        ],
+        "VII": [
+            "Design & Drawing of Reinforced Concrete Structures", "Quantity Survey, Estimation and Valuation", 
+            "Department Level Optional Course-3", "Department Level Optional Course-4", 
+            "Institute Level Optional Course-1", "Major Project-Part I"
+        ],
+        "VIII": [
+            "Design of Mechanical Systems", "Industrial Engineering and Management", 
+            "Power Engineering", "Department Level Optional Course-4", 
+            "Institute Level Optional Course-II", "Project II"
+        ]
+    },
+    "Artificial Intelligence & Machine Learning": {
+        ...commonFirstSecondSemCourses,
+        // Add additional semesters here
+        "III": [
+      "Engineering Mathematics-III",
+      "Data Structures & Algorithms",
+      "Digital Logic Design",
+      "Discrete Mathematics",
+      "Python Programming",
+      "Data Structures Lab",
+      "Python Programming Lab",
+      "Skill-Based Lab Course-I",
+      "Mini Project-1A"
+    ],
+    "IV": [
+      "Engineering Mathematics-IV",
+      "Database Management Systems",
+      "Computer Organization & Architecture",
+      "Operating Systems",
+      "Probability & Statistics",
+      "DBMS Lab",
+      "OS Lab",
+      "Skill-Based Lab Course-II",
+      "Mini Project-1B"
+    ],
+    "V": [
+      "Design & Analysis of Algorithms",
+      "Machine Learning",
+      "Web Technologies",
+      "Software Engineering",
+      "Department Elective-I (e.g., Computer Vision)",
+      "Machine Learning Lab",
+      "Web Technologies Lab",
+      "Professional Ethics",
+      "Mini Project 2A"
+    ],
+    "VI": [
+      "Artificial Intelligence",
+      "Natural Language Processing",
+      "Deep Learning Fundamentals",
+      "Department Elective-II (e.g., Reinforcement Learning)",
+      "AI Lab",
+      "NLP Lab",
+      "Skill-Based Lab Course-III",
+      "Mini Project 2B"
+    ],
+    "VII": [
+      "Advanced Machine Learning",
+      "Neural Networks",
+      "Department Elective-III (e.g., Robotics)",
+      "Department Elective-IV (e.g., IoT)",
+      "Open Elective-I",
+      "Advanced ML Lab",
+      "Major Project-Part I"
+    ],
+    "VIII": [
+      "Cognitive Computing",
+      "AI Ethics & Governance",
+      "Department Elective-V (e.g., Quantum ML)",
+      "Open Elective-II",
+      "Major Project-Part II"
+    ]
+    },
+    "Data Science": {
+        ...commonFirstSecondSemCourses,
+        // Add additional semesters here
+        "III": [
+      "Engineering Mathematics-III",
+      "Data Structures & Algorithms",
+      "Statistics for Data Science",
+      "Python Programming",
+      "Discrete Mathematics",
+      "Data Structures Lab",
+      "Python Lab",
+      "Skill-Based Lab Course-I",
+      "Mini Project-1A"
+    ],
+    "IV": [
+      "Engineering Mathematics-IV",
+      "Database Management Systems",
+      "Data Visualization",
+      "Probability & Stochastic Processes",
+      "Object-Oriented Programming",
+      "DBMS Lab",
+      "Data Visualization Lab",
+      "Skill-Based Lab Course-II",
+      "Mini Project-1B"
+    ],
+    "V": [
+      "Machine Learning",
+      "Big Data Analytics",
+      "Web Scraping & APIs",
+      "Optimization Techniques",
+      "Department Elective-I (e.g., Time Series Analysis)",
+      "ML Lab",
+      "Big Data Lab",
+      "Professional Ethics",
+      "Mini Project 2A"
+    ],
+    "VI": [
+      "Advanced Statistics",
+      "Business Intelligence",
+      "Cloud Computing",
+      "Department Elective-II (e.g., NoSQL Databases)",
+      "Cloud Lab",
+      "BI Tools Lab",
+      "Skill-Based Lab Course-III",
+      "Mini Project 2B"
+    ],
+    "VII": [
+      "Deep Learning for Data Science",
+      "Data Engineering",
+      "Department Elective-III (e.g., Fraud Analytics)",
+      "Department Elective-IV (e.g., Marketing Analytics)",
+      "Open Elective-I",
+      "Data Engineering Lab",
+      "Major Project-Part I"
+    ],
+    "VIII": [
+      "Data Governance & Privacy",
+      "Real-Time Analytics",
+      "Department Elective-V (e.g., AI for Business)",
+      "Open Elective-II",
+      "Major Project-Part II"
+    ]
+    }
+    // Add other departments as necessary
+};
+
+
+document.getElementById('classTable').addEventListener('change', function (event) {
+    if (event.target.matches('select[title="Select Semester"]')) {
+        populateCourses(event.target);
+    }
+});
+
+
+
+function populateCourses(selectElement) {
+    const semester = selectElement.value;
+    const courseDropdown = selectElement.closest('tr').querySelector('.course-dropdown');
+
+    // Clear previous options
+    courseDropdown.innerHTML = '<option value="">Select Course</option>';
+
+    // Check if the department and semester have valid courses
+    if (coursesByDepartment[userDepartment] && coursesByDepartment[userDepartment][semester]) {
+        coursesByDepartment[userDepartment][semester].forEach(course => {
+            const option = document.createElement('option');
+            option.value = course;
+            option.textContent = course;
+            courseDropdown.appendChild(option);
+        });
+    } else {
+        courseDropdown.innerHTML = '<option value="">No courses available</option>';
+    }
+    console.log("Selected Semester:", semester);
+console.log("Available Courses:", coursesByDepartment[userDepartment]?.[semester]);
+
+}
+
+
+
+
+  // Helper function to update serial numbers
+function updateSerialNumbers(tableId) {
+    const rows = document.querySelectorAll(`#${tableId} .sr-no`);
+    rows.forEach((cell, index) => {
+        cell.textContent = index + 1;
+    });
+}
+
+// Add new row to Teaching Process table
+function addRow() {
+    const table = document.getElementById('classTable');
+    const newRow = table.insertRow();
+
+    newRow.innerHTML = `
+        <td class="sr-no"></td>
+        <td>
+                <select class="form-control semester" required title="Select Semester" onchange="populateCourses(this)">
+                    <option value="">Select</option>
+                    <option value="I">I</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="IV">IV</option>
+                    <option value="V">V</option>
+                    <option value="VI">VI</option>
+                    <option value="VII">VII</option>
+                    <option value="VIII">VIII</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-control course-dropdown" required title="Select Course">
+                    <option value="">Select Course</option>
+                </select>
+            </td>
+            <td><input type="number" class="form-control classes-scheduled" required title="Enter Classes Scheduled" oninput="calculatePoints(this)" onblur="validateField(this)"></td>
+            <td><input type="number" class="form-control classes-held" required title="Enter Classes Held" oninput="calculatePoints(this)" onblur="validateField(this)"></td>
+            <td><input type="number" class="form-control points" value="0" readonly title="Calculated Points"></td>
+            <td><button class="btn btn-danger" onclick="removeRow(this)">-</button></td>
+        `;
+
+    updateSerialNumbers('classTable');
+}
+
+// Add new row to Feedback table
+function addFeedbackRow() {
+    const feedbackTable = document.getElementById('feedbackTable');
+    const newRow = feedbackTable.insertRow();
+
+    newRow.innerHTML = `
+        <td class="sr-no"></td>
+        <td>
+            <select class="form-control semester" required title="Select Semester" onchange="populateCourses(this)">
+                <option value="">Select</option>
+                <option value="I">I</option>
+                <option value="II">II</option>
+                <option value="III">III</option>
+                <option value="IV">IV</option>
+                <option value="V">V</option>
+                <option value="VI">VI</option>
+                <option value="VII">VII</option>
+                <option value="VIII">VIII</option>
+            </select>
+        </td>
+        <td><select class="form-control course-dropdown" required title="SelectCourse">
+            <option value="">Select Course</option>
+            <!-- Options will be populated dynamically -->
+        </select></td>
+        <td><input type="number" class="form-control total-points" value=5 readonly title="Total points available"></td>
+        <td><input type="number" class="form-control points-obtained" required oninput="calculateFeedbackTotal()" onblur="validateField(this)" title="Enter the points obtained"></td>
+        <td>
+                            <input type="file" class="form-control-file" onchange="uploadDocument(this)">
+                            <div class="upload-status"></div>
+                        </td>
+        <td><button class="btn btn-danger" onclick="removeFeedbackRow(this)">-</button></td>
+    `;
+
+    updateSerialNumbers('feedbackTable');
+}
+
+
+let deletedTeachingRows = [];
+let deletedFeedbackRows = [];
+
+// Function to remove a row in the teaching process table
+function removeRow(button) {
+    const row = button.closest('tr'); // Get the row
+    const srno = row.getAttribute('data-srno'); // Get the srno
+
+    // Send a request to delete this row from the database
+    deleteTeachingRowFromDatabase(srno);
+
+    // Remove the row from the DOM
+    row.remove();
+
+    // Recalculate total points after removal
+    calculateTotalPoints();
+}
+
+
+
+// Function to remove a row in the feedback table
+function removeFeedbackRow(button) {
+    const row = button.closest('tr'); // Get the row
+    const srno = row.getAttribute('data-srno'); // Get the srno
+
+    // Send a request to delete this row from the database
+    deleteFeedbackRowFromDatabase(srno);
+
+    // Remove the row from the DOM
+    row.remove();
+
+    // Recalculate total feedback points after removal
+    calculateFeedbackTotal();
+}
+
+
+// Function to delete a teaching row from the database
+function deleteTeachingRowFromDatabase(srno) {
+    const formId = document.getElementById('formId').value; // Fetch the form_id
+    $.ajax({
+        url: '/delete-teaching-row',
+        method: 'POST',
+        data: { srno: srno, form_id: formId },
+        success: function (response) {
+            console.log(`Teaching row with Sr. No. ${srno} and Form ID ${formId} deleted successfully.`);
+        },
+        error: function (xhr) {
+            console.error(`Failed to delete teaching row with Sr. No. ${srno} and Form ID ${formId}:`, xhr.responseText || xhr);
+            alert('An error occurred while deleting the row.');
+        }
+    });
+}
+
+// Function to delete a feedback row from the database
+function deleteFeedbackRowFromDatabase(srno) {
+    const formId = document.getElementById('formId').value; // Fetch the form_id
+    $.ajax({
+        url: '/delete-feedback-row',
+        method: 'POST',
+        data: { srno: srno, form_id: formId },
+        success: function (response) {
+            console.log(`Feedback row with Sr. No. ${srno} and Form ID ${formId} deleted successfully.`);
+        },
+        error: function (xhr) {
+            console.error(`Failed to delete feedback row with Sr. No. ${srno} and Form ID ${formId}:`, xhr.responseText || xhr);
+            alert('An error occurred while deleting the row.');
+        }
+    });
+}
+
+
+    
+// Reset all form fields to initial state and remove all rows from both forms
+function resetFields() {
+    if (confirm('Are you sure you want to reset all fields?')) {
+        const formId = document.getElementById('formId').value; // Get form_id from a hidden field or input
+
+        // Send an API request to reset the form in the database
+        fetch('/reset-form', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `formId=${encodeURIComponent(formId)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Clear and remove all rows for Teaching Process form
+                const teachingTableBody = document.getElementById('classTable');
+                teachingTableBody.innerHTML = ''; // Removes all rows from Teaching Process table
+
+                // Clear and remove all rows for Feedback form
+                const feedbackTableBody = document.getElementById('feedbackTable');
+                feedbackTableBody.innerHTML = ''; // Removes all rows from Feedback table
+
+                // Reset totals
+                document.getElementById('totalPoints').innerText = '0';
+                document.getElementById('totalPointsObtained').innerText = '0';
+
+                alert('Form reset successfully!');
+            } else {
+                alert('Failed to reset the form: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error resetting the form:', error);
+            alert('An error occurred while resetting the form.');
+        });
+    }
+}
+
+
+
+
+// Function to calculate Points for Teaching Process
+function calculatePoints(input) {
+    const row = input.closest('tr');
+    const scheduled = parseFloat(row.querySelector('.classes-scheduled').value) || 0;
+    const held = parseFloat(row.querySelector('.classes-held').value) || 0;
+    const pointsCell = row.querySelector('.points');
+
+    // Ensure the division is valid and calculate the points
+    if (scheduled > 0 && held >= 0) {
+        const points = (held / scheduled) * 5;
+        pointsCell.value = points.toFixed(2);
+    } else {
+        pointsCell.value = '0.00';
+    }
+
+    calculateTotalPoints();  // Update the total points after individual points calculation
+}
+
+// Function to calculate the average and total points for Teaching Process
+function calculateTotalPoints() {
+    const pointsCells = document.querySelectorAll('.points');
+    let total = 0;
+    let count = 0;
+
+    pointsCells.forEach(cell => {
+        const pointsValue = parseFloat(cell.value) || 0;
+        total += pointsValue;
+        if (pointsValue > 0) {
+            count++; // Count the number of valid rows
+        }
+    });
+
+    // If there are valid rows, calculate the average, multiply by 5, round to whole number and display
+    if (count > 0) {
+        const average = total / count;
+        const roundedTotal = Math.round(average * 5);
+        document.getElementById('totalPoints').innerText = roundedTotal;
+    } else {
+        document.getElementById('totalPoints').innerText = "0";
+    }
+}
+
+// Function to calculate the average and total points for Feedback
+function calculateFeedbackTotal() {
+    const pointsCells = document.querySelectorAll('.points-obtained');
+    let total = 0;
+    let count = 0;
+
+    pointsCells.forEach(cell => {
+        const pointsValue = parseFloat(cell.value) || 0;
+        total += pointsValue;
+        if (pointsValue > 0) {
+            count++; // Count the number of valid rows
+        }
+    });
+
+    // If there are valid rows, calculate the average, multiply by 5, round to whole number and display
+    if (count > 0) {
+        const average = total / count;
+        const roundedTotal = Math.round(average * 5);
+        document.getElementById('totalPointsObtained').innerText = roundedTotal;
+    } else {
+        document.getElementById('totalPointsObtained').innerText = "0";
+    }
+}
+ 
+
+    
+function saveFormData() {
+            let teachingData = [];
+            let formData = new FormData();
+
+            let deletedTeachingRows = [];
+            let deletedFeedbackRows = [];
+
+            // Collect Teaching Process Data
+            document.querySelectorAll('#classTable tr').forEach((row, index) => {
+                let srno = index + 1;
+                let semester = row.querySelector('.semester'); 
+                let course = row.querySelector('.course-dropdown');
+                let scheduled = row.querySelector('.classes-scheduled');
+                let held = row.querySelector('.classes-held');
+                let points = row.querySelector('.points');
+                let isDeleted = row.querySelector('.delete-checkbox') && row.querySelector('.delete-checkbox').checked;
+
+                if (isDeleted) {
+                    deletedTeachingRows.push(srno);
+                    return;
+                }
+
+                teachingData.push({
+                    srno: srno,
+                    semester: semester?.value || '',
+                    course: course?.value || '',
+                    scheduled: scheduled?.value || '',
+                    held: held?.value || '',
+                    points: points?.textContent || '0',
+                });
+            });
+
+            // Collect Feedback Data
+            document.querySelectorAll('#feedbackTable tr').forEach((row, index) => {
+                let srno = index + 1;
+                let semester = row.querySelector('.semester');
+                let course = row.querySelector('.course-dropdown');
+                let totalPoints = row.querySelector('.total-points');
+                let pointsObtained = row.querySelector('.points-obtained');
+                let fileInput = row.querySelector('input[type="file"]');
+                let isDeleted = row.querySelector('.delete-checkbox') && row.querySelector('.delete-checkbox').checked;
+
+                if (isDeleted) {
+                    deletedFeedbackRows.push(srno);
+                    return;
+                }
+
+                formData.append('feedback[]', JSON.stringify({
+                    srno: srno,
+                    semester: semester?.value || '',
+                    course: course?.value || '',
+                    totalPoints: totalPoints?.value || '',
+                    pointsObtained: pointsObtained?.value || '',
+                }));
+
+                if (fileInput && fileInput.files.length > 0) {
+                    formData.append(`files[${index}]`, fileInput.files[0]);
+                }
+            });
+
+            formData.append('teachingData', JSON.stringify(teachingData));
+            formData.append('formId', document.getElementById('formId').value);
+            formData.append('deletedTeachingRows', JSON.stringify(deletedTeachingRows));
+            formData.append('deletedFeedbackRows', JSON.stringify(deletedFeedbackRows));
+
+            $.ajax({
+                url: '/save-form-data',
+                method: 'POST',
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function (response) {
+                    alert('Form data saved successfully!');
+                },
+                error: function (xhr) {
+                    console.error('Error saving form data:', xhr.responseText || xhr);
+                    alert('There was an error saving the form data.');
+                },
+            });
+        }
+
+
+
+// Upload function 
+function uploadDocument(input) {
+    const file = input.files[0];
+    const uploadStatus = input.nextElementSibling;
+
+    if (!file) {
+        alert("Please select a file to upload.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            uploadStatus.textContent = `Error: ${data.error}`;
+            uploadStatus.style.color = 'red';
+        } else {
+            uploadStatus.textContent = `Uploaded: ${data.filename}`;
+            uploadStatus.style.color = 'green';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        uploadStatus.textContent = 'Upload failed!';
+        uploadStatus.style.color = 'red';
+    });
+}
+
+
+
+function goToNext() {
+    // Get the total points from both sections
+    let totalPoints = parseInt(document.getElementById('totalPoints').innerText); // From Teaching Process
+    let totalPointsObtained = parseInt(document.getElementById('totalPointsObtained').innerText); // From Student Feedback
+    
+    // Calculate the overall total points
+    let overallTotal = totalPoints + totalPointsObtained;
+    
+    // Get the form ID
+    let formId = document.getElementById('formId').value;
+
+    // Check if form ID and total points are valid
+    if (!formId || isNaN(overallTotal)) {
+        console.error("Invalid form ID or points.");
+        alert("Error: Please ensure all form data is filled correctly.");
+        return;
+    }
+
+    // Send the total points to the server to be saved in the database
+    $.ajax({
+        url: '/save-total-points', // Backend route to handle the saving of total points
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            form_id: formId,
+            total: overallTotal,         // Saving the combined total
+            teaching: totalPoints,       // Saving Teaching Process points
+            feedback: totalPointsObtained // Saving Student Feedback points
+        }),
+        success: function(response) {
+            // After successfully saving the data, redirect to form2 with the actual formId
+            window.location.href = "/form2/" + formId; // Redirect to the correct route with form_id in the URL path
+        },
+        error: function(error) {
+            console.error("Error saving total points:", error);
+            alert("There was an error saving the total points. Please try again.");
+        }
+    });
+}
+
+
+
+
+    </script>
+    
+    
+</body>
+
+</html>
