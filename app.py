@@ -38,7 +38,7 @@ s = URLSafeTimedSerializer(app.config['SECRET_KEY'])  # Required for flashing me
 
 # Database connection details
 db_config = {
-    'host': 'localhost',
+    'host': 'postgresql://appraisal_system_user:Eu9ywvu98jkaX7oINgYBvlBs7AGuEt3Z@dpg-cuo5egggph6c73dikkb0-a/appraisal_system',
     'user': 'root',
     'password': '123456',
     'database': 'appraisal_system'
