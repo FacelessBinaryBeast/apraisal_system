@@ -14,6 +14,7 @@ import logging
 from flask_mail import Mail
 from itsdangerous import URLSafeTimedSerializer
 import json
+import psycopg2
 
 app = Flask(__name__)
 
@@ -37,13 +38,27 @@ app.secret_key = 'mayank'
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])  # Required for flashing messages
 
 # Database connection details
+
+
+# PostgreSQL Configuration
 db_config = {
-    'host': 'postgresql://appraisal_system_user:Eu9ywvu98jkaX7oINgYBvlBs7AGuEt3Z@dpg-cuo5egggph6c73dikkb0-a/appraisal_system',
-    'user': 'root',
-    'password': '123456',
-    'database': 'appraisal_system'
-    
+    'dbname': 'appraisal_system',
+    'user': 'appraisal_system_user',
+    'password': 'Eu9ywvu98jkaX7oINgYBvlBs7AGuEt3Z',
+    'host': 'dpg-cuo5egggph6c73dikkb0-a.oregon-postgres.render.com',
+    'port': '5432'
 }
+
+# Function to Connect to PostgreSQL Database
+def connect_to_database():
+    try:
+        connection = psycopg2.connect(**db_config)
+        print("✅ Connected to PostgreSQL successfully!")
+        return connection
+    except Exception as e:
+        print(f"❌ Database Connection Failed: {e}")
+        return None
+
 
 # Function to connect to the database using PyMySQL
 # Function to connect to the database using PyMySQL
